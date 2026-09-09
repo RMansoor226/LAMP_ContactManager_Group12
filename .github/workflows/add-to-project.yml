@@ -1,0 +1,26 @@
+name: Add Issue to Project Board
+
+# Automatically adds every new issue to the team project board.
+#
+# SETUP REQUIRED:
+# 1. Replace `project-url` below with your actual project board URL, e.g.
+#      https://github.com/orgs/<ORG_NAME>/projects/<PROJECT_NUMBER>
+#      https://github.com/users/<USERNAME>/projects/<PROJECT_NUMBER>
+# 2. Create a classic Personal Access Token with `repo` + `project` scopes
+#    (the default GITHUB_TOKEN cannot write to Projects v2 boards).
+# 3. Add it as a repository secret named ADD_TO_PROJECT_PAT
+#    (Settings > Secrets and variables > Actions > New repository secret).
+
+on:
+  issues:
+    types: [opened, reopened]
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add issue to project board
+        uses: actions/add-to-project@v1.0.2
+        with:
+          project-url: https://github.com/orgs/<ORG_NAME>/projects/<PROJECT_NUMBER>
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}

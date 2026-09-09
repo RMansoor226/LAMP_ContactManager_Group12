@@ -1,0 +1,32 @@
+name: Create Issue Branch
+
+# Automatically creates a branch for each issue, named per the rules in
+# .github/issue-branch.yml. Runs after auto-label-issues.yml so the
+# component label (database/backend/frontend) is already applied and can
+# be used to pick the right iteration prefix.
+#
+# Team members can also comment `/create-branch` on any issue to trigger
+# branch creation manually if auto-creation is ever turned off.
+
+on:
+  issues:
+    types: [opened, labeled]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  create-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create branch from issue
+        uses: robvanderleek/create-issue-branch@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

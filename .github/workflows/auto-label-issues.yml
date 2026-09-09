@@ -1,0 +1,62 @@
+name: Auto Label Issues
+
+# Reads the issue title/body and applies component + iteration labels
+# automatically, based on the [DB-#], [API-#], [FE-#] prefixes used in
+# ISSUES.md, plus a few keyword-based cross-cutting labels.
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply labels based on issue title/body
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.issue.title || '';
+            const body = context.payload.issue.body || '';
+            const labelsToAdd = new Set();
+
+            // Component + iteration labels based on the issue ID prefix
+            if (/\[DB-\d+\]/i.test(title)) {
+              labelsToAdd.add('database');
+              labelsToAdd.add('iteration-1-database-setup');
+            }
+            if (/\[API-\d+\]/i.test(title)) {
+              labelsToAdd.add('backend');
+              labelsToAdd.add('iteration-2-backend-api');
+            }
+            if (/\[FE-\d+\]/i.test(title)) {
+              labelsToAdd.add('frontend');
+              labelsToAdd.add('iteration-3-frontend');
+            }
+
+            // Cross-cutting labels based on keywords in the title/body
+            const text = `${title}\n${body}`.toLowerCase();
+            if (/security|tls|hash|salt|password/.test(text)) {
+              labelsToAdd.add('security');
+            }
+            if (/document|docs|readme|swagger|bruno/.test(text)) {
+              labelsToAdd.add('docs');
+            }
+            if (/deploy|devops|migration|\.env|server|apache/.test(text)) {
+              labelsToAdd.add('devops');
+            }
+
+            if (labelsToAdd.size > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.issue.number,
+                labels: Array.from(labelsToAdd),
+              });
+              console.log(`Added labels: ${Array.from(labelsToAdd).join(', ')}`);
+            } else {
+              console.log('No matching labels found for this issue.');
+            }
