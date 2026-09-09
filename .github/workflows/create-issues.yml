@@ -1,0 +1,314 @@
+name: Create Project Issues
+
+# Creates GitHub Issues from the issue definitions in ISSUES.md.
+#
+# IMPORTANT:
+# - Run this workflow manually from the GitHub Actions tab.
+# - It will NOT create duplicate issues with the same title.
+# - It checks open AND closed issues before creating anything.
+# - Labels listed in ISSUES.md are applied when each issue is created.
+#
+# Expected ISSUES.md format:
+#
+# ### [DB-1] Issue title
+#
+# **Labels:** `database` `docs`
+#
+# **Owner:** Database role
+#
+# **Description**
+#
+# Issue description...
+#
+# **Tasks / Acceptance Criteria**
+#
+# - [ ] Task 1
+# - [ ] Task 2
+#
+# ---
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  create-issues:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create issues from ISSUES.md
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const issueFile = 'ISSUES.md';
+
+            if (!fs.existsSync(issueFile)) {
+              core.setFailed(`Could not find ${issueFile} in the repository root.`);
+              return;
+            }
+
+            const markdown = fs.readFileSync(issueFile, 'utf8');
+
+            /*
+             * Find issue headings in the form:
+             *
+             * ### [DB-1] Issue title
+             * ### [API-1] Issue title
+             * ### [FE-1] Issue title
+             *
+             * The regex captures:
+             *   1. Issue ID, e.g. DB-1
+             *   2. Issue title
+             *   3. The content belonging to that issue
+             */
+            const headingRegex =
+              /^### \[((?:DB|API|FE)-\d+)\] (.+)$/gm;
+
+            const matches = [...markdown.matchAll(headingRegex)];
+
+            if (matches.length === 0) {
+              core.setFailed(
+                'No issue definitions were found in ISSUES.md. ' +
+                'Expected headings such as "### [DB-1] Issue title".'
+              );
+              return;
+            }
+
+            console.log(`Found ${matches.length} issue definitions.`);
+
+            /*
+             * Build structured issue objects.
+             */
+            const issueDefinitions = [];
+
+            for (let i = 0; i < matches.length; i++) {
+              const match = matches[i];
+
+              const issueId = match[1];
+              const title = match[2].trim();
+
+              const bodyStart = match.index + match[0].length;
+
+              const bodyEnd =
+                i + 1 < matches.length
+                  ? matches[i + 1].index
+                  : markdown.length;
+
+              let rawBody = markdown
+                .slice(bodyStart, bodyEnd)
+                .trim();
+
+              /*
+               * Remove the separator before the next issue.
+               *
+               * Example:
+               *
+               * ---
+               *
+               * ### [DB-2] ...
+               */
+              rawBody = rawBody
+                .replace(/\n---\s*$/m, '')
+                .trim();
+
+              /*
+               * Extract labels from:
+               *
+               * **Labels:** `database` `docs`
+               */
+              const labelsMatch = rawBody.match(
+                /\*\*Labels:\*\*\s*(.+)/
+              );
+
+              let labels = [];
+
+              if (labelsMatch) {
+                labels = [...labelsMatch[1].matchAll(/`([^`]+)`/g)]
+                  .map(match => match[1].trim())
+                  .filter(Boolean);
+              }
+
+              /*
+               * Remove the Labels line from the issue body because
+               * GitHub will receive those values as actual labels.
+               */
+              rawBody = rawBody
+                .replace(
+                  /\*\*Labels:\*\*\s*.+\n?/,
+                  ''
+                )
+                .trim();
+
+              /*
+               * The Owner field describes a project role rather than
+               * a GitHub username, so it is retained in the issue body.
+               */
+
+              issueDefinitions.push({
+                issueId,
+                title,
+                body: rawBody,
+                labels
+              });
+            }
+
+            /*
+             * Fetch ALL existing issues, including closed issues.
+             *
+             * This prevents the workflow from recreating an issue that
+             * was previously created and later closed.
+             */
+            const existingIssues = await github.paginate(
+              github.rest.issues.listForRepo,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'all',
+                per_page: 100
+              }
+            );
+
+            /*
+             * Ignore pull requests when checking for existing issues.
+             */
+            const existingTitles = new Set(
+              existingIssues
+                .filter(issue => !issue.pull_request)
+                .map(issue => issue.title.trim())
+            );
+
+            console.log(
+              `Found ${existingTitles.size} existing GitHub issues.`
+            );
+
+            let createdCount = 0;
+            let skippedCount = 0;
+            let failedCount = 0;
+
+            /*
+             * Create issues one at a time.
+             *
+             * Sequential creation is intentional:
+             * it makes the workflow easier to troubleshoot and avoids
+             * unnecessarily hitting GitHub's API rate limits.
+             */
+            for (const issue of issueDefinitions) {
+              /*
+               * Prevent duplicate creation.
+               */
+              if (existingTitles.has(issue.title)) {
+                console.log(
+                  `SKIP: ${issue.issueId} "${issue.title}" already exists.`
+                );
+
+                skippedCount++;
+                continue;
+              }
+
+              /*
+               * Validate that every requested label exists before
+               * attempting to create the issue.
+               *
+               * This makes failures easier to understand if the
+               * label synchronization workflow has not been run yet.
+               */
+              const missingLabels = [];
+
+              for (const label of issue.labels) {
+                try {
+                  await github.rest.issues.getLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: label
+                  });
+                } catch (error) {
+                  if (error.status === 404) {
+                    missingLabels.push(label);
+                  } else {
+                    throw error;
+                  }
+                }
+              }
+
+              if (missingLabels.length > 0) {
+                console.log(
+                  `WARNING: ${issue.issueId} references labels that ` +
+                  `do not currently exist: ${missingLabels.join(', ')}`
+                );
+
+                /*
+                 * Do not fail the entire workflow because of a missing
+                 * label. The issue will still be created without the
+                 * missing labels.
+                 */
+                issue.labels = issue.labels.filter(
+                  label => !missingLabels.includes(label)
+                );
+              }
+
+              try {
+                const createdIssue =
+                  await github.rest.issues.create({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    title: issue.title,
+                    body: issue.body,
+                    labels: issue.labels
+                  });
+
+                console.log(
+                  `CREATED: ${issue.issueId} ` +
+                  `#${createdIssue.data.number} "${issue.title}"`
+                );
+
+                createdCount++;
+
+                /*
+                 * Add the title immediately to our local set so that
+                 * duplicate definitions inside ISSUES.md cannot create
+                 * duplicate issues during this same workflow run.
+                 */
+                existingTitles.add(issue.title);
+
+              } catch (error) {
+                console.error(
+                  `FAILED: ${issue.issueId} "${issue.title}"`
+                );
+                console.error(error.message);
+
+                failedCount++;
+              }
+            }
+
+            /*
+             * Final summary.
+             */
+            console.log('');
+            console.log('========================================');
+            console.log('Issue Creation Summary');
+            console.log('========================================');
+            console.log(`Definitions found: ${issueDefinitions.length}`);
+            console.log(`Issues created:     ${createdCount}`);
+            console.log(`Issues skipped:     ${skippedCount}`);
+            console.log(`Issues failed:      ${failedCount}`);
+            console.log('========================================');
+
+            /*
+             * Fail the workflow if one or more issues could not be created.
+             * This makes a failed run immediately visible in GitHub Actions.
+             */
+            if (failedCount > 0) {
+              core.setFailed(
+                `${failedCount} issue(s) failed to be created. ` +
+                `Review the workflow log for details.`
+              );
+            }
+```
