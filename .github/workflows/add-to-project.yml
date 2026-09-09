@@ -22,5 +22,5 @@ jobs:
       - name: Add issue to project board
         uses: actions/add-to-project@v1.0.2
         with:
-          project-url: https://github.com/orgs/<ORG_NAME>/projects/<PROJECT_NUMBER>
+          project-url: https://github.com/users/RMansoor226/projects/2
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
