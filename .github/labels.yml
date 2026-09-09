@@ -1,0 +1,35 @@
+- name: database
+  color: "1D76DB"
+  description: "Database schema, ERD, and MySQL setup"
+
+- name: backend
+  color: "5319E7"
+  description: "PHP REST API development"
+
+- name: frontend
+  color: "0E8A16"
+  description: "Front-end UI development"
+
+- name: security
+  color: "D93F0B"
+  description: "Authentication, TLS, hashing/salting, and data protection"
+
+- name: docs
+  color: "0075CA"
+  description: "Documentation, API docs, and README updates"
+
+- name: devops
+  color: "FBCA04"
+  description: "Deployment, migrations, and infrastructure"
+
+- name: iteration-1-database-setup
+  color: "C5DEF5"
+  description: "Iteration 1: Database Setup"
+
+- name: iteration-2-backend-api
+  color: "BFD4F2"
+  description: "Iteration 2: Backend API Development"
+
+- name: iteration-3-frontend
+  color: "D4C5F9"
+  description: "Iteration 3: Frontend Development"
