@@ -1,0 +1,21 @@
+body {
+    min-height: 100vh;
+    margin: 0;
+}
+
+#contactLogo {
+    width: 10vw;
+    height: 10vh;
+}
+
+.login-gradient {
+    background: linear-gradient(45deg, #0d83a1, #075163);
+}
+
+.form-color {
+    background-color: darkslategrey;
+}
+
+.main-text-color {
+    color: floralwhite;
+}
