@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/index.css">
+        <title>Contact Manager</title>
+    </head>
+    <body class="test-background">
+        <div class="container d-flex flex-column justify-content-center align-items-center">
+            <div id="loginHeader" class="d-flex flex-column justify-content-center align-items-center">
+                <img id="contactLogo" src="media/contactLogo.png" alt="Contact Manager Logo" class="login-gradient">
+                <h1 class="main-text-color">Contact Manager</h1>
+            </div>
+
+            <div id="loginPortal" class="d-flex flex-column justify-content-center align-items-center m-5 p-5 login-gradient">
+                <h2 class="login-text-color text-center">Login Portal</h2>
+
+                <form id="loginForm" class="d-flex flex-column justify-content-center align-items-start login-text-color m-4">
+                    <div class="m-1">
+                        <label for="username" class="my-1">Username</label><br>
+                        <input type="text" id="username" name="username" class="login-border-color"><br>
+                    </div>
+
+                    <div class="m-1">
+                        <label for="password" class="my-1">Password</label><br>
+                        <input type="text" id="password" name="password" class="login-border-color"><br>
+                    </div>
+                </form>
+
+                <div id="loginButtons" class="d-flex flex-column align-items-center mt-2 mb-0 w-75">
+                    <button type="submit" class="btn test-background main-text-color w-100">Login</button>
+                    <button type="submit" class="btn login-border-color login-text-color mt-2 w-100">Register</button>
+                </div>
+            </div>
+
+            <div id="registrationPortal" class="d-none flex-column justify-content-center align-items-center m-5 p-5 border border-3 border-dark rounded login-gradient">
+                <h2 class="login-text-color text-center">Account Registration</h2>
+
+                <form id="registrationForm" class="d-flex flex-column justify-content-center align-items-start login-text-color m-4">
+                    <div class="m-1">
+                        <label for="newUsername" class="my-1">Username</label><br>
+                        <input type="text" id="newUsername" name="username"><br>
+                    </div>
+
+                    <div class="m-1">
+                        <label for="newPassword" class="my-1">Password</label><br>
+                        <input type="text" id="newPassword" name="password"><br>
+                    </div>
+                </form>
+
+                <div id="registrationButtons" class="d-flex flex-column align-items-center mt-2 mb-0 w-75">
+                    <button type="submit" class="btn btn-primary m-2 w-100">Create Account</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/jquery-4.0.0.min.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>

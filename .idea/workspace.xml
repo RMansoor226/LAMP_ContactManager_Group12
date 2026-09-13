@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f24b2f51-9c17-446e-92f7-d1b7fdb39e6f" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="CSS File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;RMansoor226&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/RMansoor226/LAMP_ContactManager_Group12.git&quot;,
+    &quot;accountId&quot;: &quot;14ac8381-39f7-4ba7-9ea6-64320d94a7c3&quot;
+  }
+}</component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.6669373751211256" />
+      <entry key="MS500" value="4.995294610842162" />
+      <entry key="S2" value="8.751359743564635" />
+      <entry key="S5" value="10.28182365593663" />
+      <entry key="S10" value="12.983386533128103" />
+      <entry key="S30" value="25.337649995618104" />
+      <entry key="S60" value="36.810469717269704" />
+      <entry key="M2" value="46.82448820544109" />
+      <entry key="M5" value="55.14353719501463" />
+      <entry key="M10" value="58.45579288152312" />
+      <entry key="M15" value="60.15354479053146" />
+      <entry key="M30" value="72.15328932031602" />
+      <entry key="H1" value="119.8187003295401" />
+      <entry key="H2" value="222.18226768041566" />
+      <entry key="H4" value="364.94173031972446" />
+      <entry key="D1" value="629.6084052643873" />
+      <entry key="W1" value="700.2254207622259" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="4.867004572246906E-221" />
+      <entry key="S30" value="3.844928534729835E-74" />
+      <entry key="S60" value="2.57554716263828E-37" />
+      <entry key="M2" value="9.007449834578E-19" />
+      <entry key="M5" value="1.6512045940742362E-7" />
+      <entry key="M10" value="0.0011924403909056372" />
+      <entry key="M15" value="0.02659645606884105" />
+      <entry key="M30" value="0.7134734866876734" />
+      <entry key="H1" value="4.235419640113534" />
+      <entry key="H2" value="11.485616764183264" />
+      <entry key="H4" value="20.17315909991876" />
+      <entry key="D1" value="33.99576954428453" />
+      <entry key="W1" value="37.39455956521404" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="1.6388597506766107" />
+      <entry key="MS500" value="4.9636461626773345" />
+      <entry key="S2" value="8.734775282840134" />
+      <entry key="S5" value="10.273812075000027" />
+      <entry key="S10" value="12.978332654542895" />
+      <entry key="S30" value="25.33452238454866" />
+      <entry key="S60" value="36.808283717593014" />
+      <entry key="M2" value="46.82313124285382" />
+      <entry key="M5" value="55.142908040747734" />
+      <entry key="M10" value="58.45662383066413" />
+      <entry key="M15" value="60.179507091712324" />
+      <entry key="M30" value="72.86213061785138" />
+      <entry key="H1" value="124.0422816970058" />
+      <entry key="H2" value="233.65210585692526" />
+      <entry key="H4" value="385.1005218002366" />
+      <entry key="D1" value="663.5998855369544" />
+      <entry key="W1" value="737.6192974251004" />
+    </decayedShown>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3J9qaYHOp63Zp0sYRYRxik3pSsL" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "#29 on iteration-3-frontend/20-build-login-page",
+    "ignore.virus.scanning.warn.message": "true",
+    "javascript.preferred.runtime.type.id": "node",
+    "junie.onboarding.icon.badge.shown": "true",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\apaxm\WebstormProjects\LAMP_ContactManager_Group12" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-WS-261.26222.58" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f24b2f51-9c17-446e-92f7-d1b7fdb39e6f" name="Changes" comment="" />
+      <created>1789083696606</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1789083696606</updated>
+      <workItem from="1789083698295" duration="6988000" />
+      <workItem from="1789135660094" duration="5160000" />
+      <workItem from="1789330799187" duration="4078000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

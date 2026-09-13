@@ -1,0 +1,43 @@
+body {
+    min-height: 100vh;
+    margin: 0;
+}
+
+#contactLogo {
+    width: 10vw;
+    height: 10vh;
+}
+
+#loginPortal, #registrationPortal {
+    width: 30%;
+    height: 100%;
+}
+
+.login-gradient {
+    background: linear-gradient(135deg, #e2e8f0, #64748b);
+}
+
+.background {
+    background: linear-gradient(45deg, #0d83a1, #07fade);
+}
+
+.test-background {
+    background: radial-gradient(circle at top left, #19253d 0%, #0b111e 100%);;
+}
+
+.login-border-color {
+    border: 1px solid #0b111e;
+    border-radius: 5px;
+}
+
+.main-text-color {
+    color: #e2e8f0;
+}
+
+.login-text-color {
+    color: #0b111e;
+}
+
+.img-color {
+    color: #e2e8f0;
+}
