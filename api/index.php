@@ -30,6 +30,14 @@ switch ($endpoint) {
     case 'register':
         require_once 'endpoints/register.php';
         break;
+
+    case 'login':
+        require_once 'endpoints/login.php';
+        break;
+
+    case 'logout':
+        require_once 'endpoints/logout.php';
+        break;
         
     default:
         // If the URL doesn't match any known endpoints
