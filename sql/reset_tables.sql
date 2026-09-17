@@ -1,3 +1,5 @@
+DROP DATABASE ContactsAppDB;
+
 -- create and select the database
 CREATE DATABASE IF NOT EXISTS `ContactsAppDB`
     DEFAULT CHARACTER SET utf8mb4
@@ -8,10 +10,10 @@ USE `ContactsAppDB`;
 -- create user table
 CREATE TABLE IF NOT EXISTS `Users` (
     `ID` INT NOT NULL AUTO_INCREMENT,
-    `FirstName` VARCHAR() NOT NULL DEFAULT '',
+    `FirstName` VARCHAR(50) NOT NULL DEFAULT '',
     `LastName` VARCHAR(50) NOT NULL DEFAULT '',
     `Username` VARCHAR(50) NOT NULL DEFAULT '',
-    `Password` VARCHAR(255) NOT NULL DEFAULT '',
+    `Password` VARCHAR(50) NOT NULL DEFAULT '',
     `Admin` INT NOT NULL DEFAULT 0,
     `Disabled` INT NOT NULL DEFAULT 0,
     `DateCreated` DATE,
