@@ -1,0 +1,5 @@
+name: Production
+variables:
+  - name: urlBase
+    value: https://lamp2.vjmuzik.dev
+    description: ""
