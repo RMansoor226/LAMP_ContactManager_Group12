@@ -4,10 +4,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     sendJson(405, "error", "Method not allowed. Use POST.");
 }
 
-// Ensure the database connection exists
-require_once 'config/database.php'; 
-$pdo = getDB();
-
 // Start the session
 if (session_status() === PHP_SESSION_NONE) {
     session_start();

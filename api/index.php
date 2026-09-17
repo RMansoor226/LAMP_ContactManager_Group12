@@ -1,13 +1,14 @@
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-// 1. Include the JSON helper globally
+// Include the JSON helper globally
 require_once 'core/response.php';
+require_once 'core/auth.php';
+require_once 'core/security.php';
+require_once 'config/database.php';
+$pdo = getDB();
 
-// 2. Global headers for CORS (Cross-Origin Resource Sharing)
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+setCORSHeaders();
 
 // Handle preflight OPTIONS requests for CORS
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -15,11 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
-// 3. Parse the requested route (e.g., /api/hello -> 'hello')
+// Parse the requested route (e.g., /api/hello -> 'hello')
 $request_path = isset($_GET['request']) ? rtrim($_GET['request'], '/') : '';
 $route = explode('/', $request_path);
 
-// 4. Basic Router
+// Basic Router
 $endpoint = $route[0]; // The first part of the URL after /api/
 
 switch ($endpoint) {
@@ -37,6 +38,18 @@ switch ($endpoint) {
 
     case 'logout':
         require_once 'endpoints/logout.php';
+        break;
+
+    case 'contacts':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            require_once 'endpoints/create_contact.php';
+        } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            require_once 'endpoints/delete_contact.php';
+        } elseif ($_SERVER['REQUEST_METHOD'] === 'PUT' || $_SERVER['REQUEST_METHOD'] === 'PATCH') {
+            require_once 'endpoints/update_contact.php';
+        } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            require_once 'endpoints/get_contacts.php';
+        }
         break;
         
     default:

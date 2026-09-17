@@ -1,0 +1,22 @@
+info:
+  name: Delete Contact
+  type: http
+  seq: 6
+
+http:
+  method: DELETE
+  url: "{{urlBase}}/api/contacts"
+  body:
+    type: json
+    data: |-
+      {
+        "ContactID": "5"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

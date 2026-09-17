@@ -125,7 +125,7 @@ function clean($data) {
  *
  * @return int User ID
  */
-function requireAuth() {
+function requireAuth2() {
     $userId = null;
 
     // 1. Check Authorization Header (Bearer token, raw ID, or JWT)

@@ -1,5 +1,5 @@
 name: Production
 variables:
   - name: urlBase
-    value: 157.230.184.110:80
+    value: https://lamp2.vjmuzik.dev
     description: ""
