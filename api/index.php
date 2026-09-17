@@ -26,6 +26,10 @@ switch ($endpoint) {
     case 'hello':
         require_once 'endpoints/hello.php';
         break;
+
+    case 'register':
+        require_once 'endpoints/register.php';
+        break;
         
     default:
         // If the URL doesn't match any known endpoints
