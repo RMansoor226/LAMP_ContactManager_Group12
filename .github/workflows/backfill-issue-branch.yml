@@ -1,0 +1,205 @@
+name: Backfill Issue Branches
+
+# One-time/manual workflow for creating branches for issues that
+# already exist in the repository.
+#
+# This is intentionally separate from the automatic issue-branch
+# workflow so existing issues can be processed without needing to
+# re-trigger GitHub issue events.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  create-branches:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create branches for existing issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            /*
+             * Get all issues, including closed issues.
+             */
+            const issues = await github.paginate(
+              github.rest.issues.listForRepo,
+              {
+                owner,
+                repo,
+                state: 'all',
+                per_page: 100
+              }
+            );
+
+            /*
+             * Ignore pull requests.
+             */
+            const realIssues = issues.filter(issue => !issue.pull_request);
+
+            console.log(`Found ${realIssues.length} issues.`);
+
+            /*
+             * Get the repository's default branch.
+             */
+            const repository = await github.rest.repos.get({
+              owner,
+              repo
+            });
+
+            const defaultBranch = repository.data.default_branch;
+
+            console.log(`Default branch: ${defaultBranch}`);
+
+            /*
+             * Get the SHA of the default branch.
+             */
+            const defaultBranchRef = await github.rest.git.getRef({
+              owner,
+              repo,
+              ref: `heads/${defaultBranch}`
+            });
+
+            const baseSha = defaultBranchRef.data.object.sha;
+
+            let created = 0;
+            let skipped = 0;
+            let ignored = 0;
+
+            for (const issue of realIssues) {
+
+              const labels = issue.labels.map(label => label.name);
+
+              /*
+               * Determine which component the issue belongs to.
+               */
+              let prefix = null;
+
+              if (labels.includes('database')) {
+                prefix = 'iteration-1-database/';
+              } else if (labels.includes('backend')) {
+                prefix = 'iteration-2-backend/';
+              } else if (labels.includes('frontend')) {
+                prefix = 'iteration-3-frontend/';
+              }
+
+              /*
+               * Ignore issues that don't have one of the three
+               * component labels.
+               */
+              if (!prefix) {
+                console.log(
+                  `IGNORE #${issue.number}: ` +
+                  `No database/backend/frontend label.`
+                );
+
+                ignored++;
+                continue;
+              }
+
+              /*
+               * Convert the issue title into a Git-safe branch name.
+               *
+               * Example:
+               *
+               * "Build Create Contact Endpoint"
+               *
+               * becomes:
+               *
+               * "build-create-contact-endpoint"
+               */
+              let safeTitle = issue.title
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+
+              /*
+               * Keep branch names reasonably manageable.
+               */
+              safeTitle = safeTitle.substring(0, 80);
+
+              const branchName =
+                `${prefix}${issue.number}-${safeTitle}`;
+
+              console.log('');
+              console.log(
+                `Issue #${issue.number}: ${issue.title}`
+              );
+              console.log(
+                `Labels: ${labels.join(', ')}`
+              );
+              console.log(
+                `Target branch: ${branchName}`
+              );
+
+              /*
+               * Check whether the branch already exists.
+               */
+              let branchExists = false;
+
+              try {
+                await github.rest.git.getRef({
+                  owner,
+                  repo,
+                  ref: `heads/${branchName}`
+                });
+
+                branchExists = true;
+              } catch (error) {
+                if (error.status !== 404) {
+                  throw error;
+                }
+              }
+
+              if (branchExists) {
+                console.log(
+                  `SKIP: Branch already exists: ${branchName}`
+                );
+
+                skipped++;
+                continue;
+              }
+
+              /*
+               * Create the branch from the repository's default branch.
+               */
+              try {
+                await github.rest.git.createRef({
+                  owner,
+                  repo,
+                  ref: `refs/heads/${branchName}`,
+                  sha: baseSha
+                });
+
+                console.log(
+                  `CREATED: ${branchName}`
+                );
+
+                created++;
+
+              } catch (error) {
+                console.error(
+                  `FAILED: Could not create ${branchName}`
+                );
+                console.error(error.message);
+
+                throw error;
+              }
+            }
+
+            console.log('');
+            console.log('======================================');
+            console.log('Branch Backfill Summary');
+            console.log('======================================');
+            console.log(`Issues found:     ${realIssues.length}`);
+            console.log(`Branches created: ${created}`);
+            console.log(`Already existed:  ${skipped}`);
+            console.log(`Ignored:          ${ignored}`);
+            console.log('======================================');

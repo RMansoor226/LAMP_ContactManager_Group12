@@ -1,32 +1,36 @@
 name: Create Issue Branch
 
-# Automatically creates a branch for each issue, named per the rules in
-# .github/issue-branch.yml. Runs after auto-label-issues.yml so the
-# component label (database/backend/frontend) is already applied and can
-# be used to pick the right iteration prefix.
+# Creates a branch when an issue receives one of the component labels:
+# database, backend, or frontend.
 #
-# Team members can also comment `/create-branch` on any issue to trigger
-# branch creation manually if auto-creation is ever turned off.
+# The branch name and source branch rules are defined in:
+# .github/issue-branch.yml
+#
+# This workflow intentionally does NOT trigger on "opened".
+# The issue must first receive its component label so that the
+# correct branch prefix can be selected.
 
 on:
   issues:
-    types: [opened, labeled]
-  issue_comment:
-    types: [created]
+    types: [labeled]
 
 permissions:
   contents: write
   issues: write
-  pull-requests: write
 
 jobs:
   create-branch:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    # Only create a branch when one of the three component labels
+    # is added. Ignore security/docs/devops/iteration labels.
+    if: >
+      github.event.label.name == 'database' ||
+      github.event.label.name == 'backend' ||
+      github.event.label.name == 'frontend'
 
-      - name: Create branch from issue
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create Issue Branch
         uses: robvanderleek/create-issue-branch@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
