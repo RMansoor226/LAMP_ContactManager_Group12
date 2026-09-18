@@ -16,24 +16,31 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 $data = sanitizeInput($data);
 
 // Validate required fields
-if (empty($data['FirstName']) || empty($data['LastName']) || empty($data['Email']) || empty($data['PhoneNumber'])) {
-    sendJson(400, "error", "Missing required fields. FirstName, LastName, Email, and PhoneNumber are required.");
+if (
+    empty($data['FirstName']) ||
+    empty($data['LastName']) ||
+    empty($data['Username']) ||
+    empty($data['Password'])
+) {
+    sendJson(
+        400,
+        "error",
+        "Missing required fields. FirstName, LastName, Username, and Password are required."
+    );
 }
 
 $firstName = $data['FirstName'];
 $lastName = $data['LastName'];
-$email = $data['Email'];
-$phone = $data['PhoneNumber'];
+$username = $data['Username'];
+$password = $data['Password'];
 
-// Enforce input lengths based on your varchar[50] database limits
+// Enforce input lengths based on database limits
 validateLength($firstName, 50, "First Name");
 validateLength($lastName, 50, "Last Name");
-validateLength($email, 50, "Email");
-validateLength($phone, 50, "Phone Number");
-// --------------------------
+validateLength($username, 50, "Username");
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    sendJson(400, "error", "Invalid email format.");
+if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
+    sendJson(400, "error", "Invalid email format provided for Username.");
 }
 
 try {
