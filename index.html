@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/index.css">
+        <title>Contact Manager</title>
+    </head>
+    <body class="login-gradient">
+        <div class="container d-flex flex-column align-items-center">
+            <div id="loginHeader" class="d-flex flex-column justify-content-center align-items-center">
+                <img id="contactLogo" src="media/contactLogo.png" alt="Contact Manager Logo">
+                <h1 class="main-text-color">Contact Manager</h1>
+            </div>
+
+            <div id="loginPortal" class="d-flex flex-column justify-content-center align-items-center w-25 m-5 p-5 border border-3 border-dark rounded form-color">
+                <h2>Login Portal</h2>
+
+                <form id="loginForm" class="d-flex flex-column justify-content-center align-items-start">
+                    <label for="username">Username</label><br>
+                    <input type="text" id="username" name="username"><br>
+
+                    <label for="password">Password</label><br>
+                    <input type="text" id="password" name="password"><br>
+                </form>
+
+                <div id="loginButtons" class="d-flex flex-column align-items-center">
+                    <button type="submit" class="btn btn-primary m-2">Login</button>
+                    <button type="submit" class="btn btn-secondary m-2">Register</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/jquery-4.0.0.min.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>

@@ -1,25 +1,23 @@
 # Configuration for robvanderleek/create-issue-branch
-# Automatically creates a branch for every new issue, named according
-# to which component label it carries (set by auto-label-issues.yml).
 
-autoCreateBranch: true
+# Create the branch immediately when the workflow invokes the action.
+mode: immediate
 
-# Default naming pattern if no label below matches
+# Default branch name if no component label matches.
 branchName: 'issue-${issue.number}-${issue.title}'
 
+# Select the branch name based on the component label.
 branches:
   - label: 'database'
-    name: 'iteration-1-database/${issue.number}-${issue.title}'
+    prefix: 'iteration-1-database/'
 
   - label: 'backend'
-    name: 'iteration-2-backend/${issue.number}-${issue.title}'
+    prefix: 'iteration-2-backend/'
 
   - label: 'frontend'
-    name: 'iteration-3-frontend/${issue.number}-${issue.title}'
+    prefix: 'iteration-3-frontend/'
 
-# Applies to all generated branch names:
-# - lowercase
-# - spaces and special characters replaced with hyphens
+# Normalize generated branch names.
 branchNameTransformations:
   - lower-case
   - replace-spaces-with-hyphens
