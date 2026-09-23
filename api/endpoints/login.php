@@ -58,7 +58,7 @@ try {
 
 } catch (PDOException $e) {
     // Log the actual error internally, but return a generic message to the client
-    error_log("Database Error in register.php: " . $e->getMessage());
-    sendJson(500, "error", "A database error occurred.: " . $e->getMessage());
+    error_log("Database Error in login.php: " . $e->getMessage());
+    sendJson(500, "error", "A database error occurred.");
 }
 ?>
