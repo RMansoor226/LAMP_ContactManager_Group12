@@ -24,6 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function onLogin(event) {
+    console.log("onLogin called")
+
     event.preventDefault();
     const form = event.currentTarget;
     const submitButton = form.querySelector("button[type='submit']");
@@ -36,6 +38,8 @@ async function onLogin(event) {
         showMessage("formMessage", "Username and password are required.", "danger");
         return;
     }
+
+    console.log(username, password);
 
     // if (!isUsername(username)) {
     //     showMessage("formMessage", "Enter a valid username.", "danger");
