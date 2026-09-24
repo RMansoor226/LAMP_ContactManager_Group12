@@ -3,7 +3,7 @@ const API_BASE = "api";
 document.addEventListener("DOMContentLoaded", () => {
     const registered = new URLSearchParams(window.location.search).get("registered");
     if (registered === "1") {
-        showMessage("formMessage", "Account created. Log in with your email and password.", "success");
+        showMessage("formMessage", "Account created. Log in with your username and password.", "success");
     }
 
     const loginForm = document.getElementById("loginForm");
@@ -33,14 +33,14 @@ async function onLogin(event) {
     const password = form.password.value;
 
     if (!username || !password) {
-        showMessage("formMessage", "Email and password are required.", "danger");
+        showMessage("formMessage", "Username and password are required.", "danger");
         return;
     }
 
-    if (!isEmail(username)) {
-        showMessage("formMessage", "Enter a valid email address.", "danger");
-        return;
-    }
+    // if (!isUsername(username)) {
+    //     showMessage("formMessage", "Enter a valid username.", "danger");
+    //     return;
+    // }
 
     setBusy(submitButton, true);
 
@@ -77,14 +77,14 @@ async function onRegister(event) {
     const confirmPassword = form.confirmPassword.value;
 
     if (!firstName || !lastName || !username || !password) {
-        showMessage("formMessage", "First name, last name, email, and password are required.", "danger");
+        showMessage("formMessage", "First name, last name, username, and password are required.", "danger");
         return;
     }
 
-    if (!isEmail(username)) {
-        showMessage("formMessage", "Enter a valid email address.", "danger");
-        return;
-    }
+    // if (!isUsername(username)) {
+    //     showMessage("formMessage", "Enter a valid username.", "danger");
+    //     return;
+    // }
 
     if (password !== confirmPassword) {
         showMessage("formMessage", "Passwords do not match.", "danger");
@@ -167,9 +167,9 @@ async function postJson(path, body) {
     return { ok: response.ok, payload };
 }
 
-function isEmail(value) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
+// function isUsername(value) {
+//     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+// }
 
 function showMessage(id, message, kind) {
     const element = document.getElementById(id);
