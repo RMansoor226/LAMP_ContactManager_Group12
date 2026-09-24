@@ -25,10 +25,10 @@ if (empty($data['Username']) || empty($data['Password'])) {
 $username = trim($data['Username']); 
 $password = $data['Password'];
 
-// Validate email format
-if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
-    sendJson(400, "error", "Invalid email format provided for Username.");
-}
+// // Validate email format
+// if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
+//     sendJson(400, "error", "Invalid email format provided for Username.");
+// }
 
 try {
     // Fetch the user by their Username (Email)
