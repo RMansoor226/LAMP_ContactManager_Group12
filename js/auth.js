@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function onLogin(event) {
-    console.log("onLogin called")
 
     event.preventDefault();
     const form = event.currentTarget;
@@ -39,7 +38,7 @@ async function onLogin(event) {
         return;
     }
 
-    console.log(username, password);
+    console.log(`Username=${username}; password=${password}`);
 
     // if (!isUsername(username)) {
     //     showMessage("formMessage", "Enter a valid username.", "danger");

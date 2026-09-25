@@ -25,6 +25,9 @@ if (empty($data['Username']) || empty($data['Password'])) {
 $username = trim($data['Username']); 
 $password = $data['Password'];
 
+error_log("LOGIN DEBUG username=[" . $username . "]");
+error_log("LOGIN DEBUG password=[" . $password . "]");
+
 // // Validate email format
 // if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
 //     sendJson(400, "error", "Invalid email format provided for Username.");
@@ -32,10 +35,20 @@ $password = $data['Password'];
 
 try {
     // Fetch the user by their Username (Email)
-    $stmt = $pdo->prepare("SELECT ID, FirstName, LastName, Password FROM Users WHERE Username = :username");
+    $stmt = $pdo->prepare("SELECT ID, FirstName, LastName, Username, Password FROM Users WHERE Username = :username");
     $stmt->bindParam(':username', $username);
     $stmt->execute();
     $user = $stmt->fetch();
+
+    error_log("LOGIN DEBUG user found=" . ($user ? "YES" : "NO"));
+
+    if ($user) {
+        error_log("LOGIN DEBUG DB username=[" . $user['Username'] . "]");
+        error_log("LOGIN DEBUG hash=[" . $user['Password'] . "]");
+        error_log("LOGIN DEBUG password_verify=" .
+            (password_verify($password, $user['Password']) ? "TRUE" : "FALSE")
+        );
+    }
 
     $authErrorMessage = "Invalid username or password.";
 
