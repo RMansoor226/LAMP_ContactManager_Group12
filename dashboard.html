@@ -22,35 +22,14 @@
             <input id="contactSearch" class="form-control mb-3" type="search" placeholder="Search contacts" autocomplete="off">
 
             <div class="d-flex gap-2 mb-3">
-                <button id="createButton" class="btn btn-login" type="button">Create</button>
+                <a id="createButton" class="btn btn-login" href="create.html">Create</a>
                 <button id="deleteButton" class="btn btn-login" type="button">Delete</button>
+                <button id="cancelDeleteButton" class="btn btn-login d-none" type="button">Cancel</button>
             </div>
 
             <div id="listMessage" class="alert d-none" role="status"></div>
 
-            <form id="createForm" class="mb-3 d-none" novalidate>
-                <h2 class="h5">New contact</h2>
-                <div class="row g-2">
-                    <div class="col-sm-6">
-                        <label class="form-label" for="newFirstName">First name</label>
-                        <input class="form-control" id="newFirstName" name="firstName" maxlength="50" required>
-                    </div>
-                    <div class="col-sm-6">
-                        <label class="form-label" for="newLastName">Last name</label>
-                        <input class="form-control" id="newLastName" name="lastName" maxlength="50" required>
-                    </div>
-                    <div class="col-sm-6">
-                        <label class="form-label" for="newPhone">Phone</label>
-                        <input class="form-control" id="newPhone" name="phone" maxlength="50" required>
-                    </div>
-                    <div class="col-sm-6">
-                        <label class="form-label" for="newEmail">Email</label>
-                        <input class="form-control" type="email" id="newEmail" name="email" maxlength="50" required>
-                    </div>
-                </div>
-                <button class="btn btn-login mt-3" type="submit">Save contact</button>
-            </form>
-
+            <div id="contactSort" class="sort-item" role="button" tabindex="0">Order: Alphabetical</div>
             <ul id="contactList" class="contact-list"></ul>
         </section>
     </main>
