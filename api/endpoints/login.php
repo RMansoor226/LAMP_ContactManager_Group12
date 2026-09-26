@@ -25,17 +25,30 @@ if (empty($data['Username']) || empty($data['Password'])) {
 $username = trim($data['Username']); 
 $password = $data['Password'];
 
-// Validate email format
-if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
-    sendJson(400, "error", "Invalid email format provided for Username.");
-}
+error_log("LOGIN DEBUG username=[" . $username . "]");
+error_log("LOGIN DEBUG password=[" . $password . "]");
+
+// // Validate email format
+// if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
+//     sendJson(400, "error", "Invalid email format provided for Username.");
+// }
 
 try {
     // Fetch the user by their Username (Email)
-    $stmt = $pdo->prepare("SELECT ID, FirstName, LastName, Password FROM Users WHERE Username = :username");
+    $stmt = $pdo->prepare("SELECT ID, FirstName, LastName, Username, Password FROM Users WHERE Username = :username");
     $stmt->bindParam(':username', $username);
     $stmt->execute();
     $user = $stmt->fetch();
+
+    error_log("LOGIN DEBUG user found=" . ($user ? "YES" : "NO"));
+
+    if ($user) {
+        error_log("LOGIN DEBUG DB username=[" . $user['Username'] . "]");
+        error_log("LOGIN DEBUG hash=[" . $user['Password'] . "]");
+        error_log("LOGIN DEBUG password_verify=" .
+            (password_verify($password, $user['Password']) ? "TRUE" : "FALSE")
+        );
+    }
 
     $authErrorMessage = "Invalid username or password.";
 
@@ -58,7 +71,7 @@ try {
 
 } catch (PDOException $e) {
     // Log the actual error internally, but return a generic message to the client
-    error_log("Database Error in register.php: " . $e->getMessage());
-    sendJson(500, "error", "A database error occurred.: " . $e->getMessage());
+    error_log("Database Error in login.php: " . $e->getMessage());
+    sendJson(500, "error", "A database error occurred.");
 }
 ?>

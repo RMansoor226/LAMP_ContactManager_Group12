@@ -8,53 +8,57 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $json_data = file_get_contents("php://input");
 $data = json_decode($json_data, true);
 
-if (json_last_error() !== JSON_ERROR_NONE) {
+if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
     sendJson(400, "error", "Invalid JSON payload.");
 }
 
-// Sanitize the entire JSON array against XSS before doing anything else
-$data = sanitizeInput($data);
-
-// Validate required fields
-if (empty($data['FirstName']) || empty($data['LastName']) || empty($data['Email']) || empty($data['PhoneNumber'])) {
-    sendJson(400, "error", "Missing required fields. FirstName, LastName, Email, and PhoneNumber are required.");
+// Validate required fields before sanitizing so a missing password is not confused with a hash
+if (
+    !isset($data['FirstName'], $data['LastName'], $data['Username'], $data['Password']) ||
+    !is_string($data['FirstName']) ||
+    !is_string($data['LastName']) ||
+    !is_string($data['Username']) ||
+    !is_string($data['Password']) ||
+    trim($data['FirstName']) === '' ||
+    trim($data['LastName']) === '' ||
+    trim($data['Username']) === '' ||
+    $data['Password'] === ''
+) {
+    sendJson(
+        400,
+        "error",
+        "Missing required fields. FirstName, LastName, Username, and Password are required."
+    );
 }
 
-$firstName = $data['FirstName'];
-$lastName = $data['LastName'];
-$email = $data['Email'];
-$phone = $data['PhoneNumber'];
+// Sanitize text fields only. The password is hashed, not stored or rendered, and must match login byte-for-byte.
+$firstName = sanitizeInput($data['FirstName']);
+$lastName = sanitizeInput($data['LastName']);
+$username = sanitizeInput($data['Username']);
+$password = $data['Password'];
 
-// Enforce input lengths based on your varchar[50] database limits
 validateLength($firstName, 50, "First Name");
 validateLength($lastName, 50, "Last Name");
-validateLength($email, 50, "Email");
-validateLength($phone, 50, "Phone Number");
-// --------------------------
+validateLength($username, 50, "Username");
+validateLength($password, 72, "Password");
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    sendJson(400, "error", "Invalid email format.");
+if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
+    sendJson(400, "error", "Invalid email format provided for Username.");
 }
 
 try {
-    // Check for duplicate emails/usernames
     $checkStmt = $pdo->prepare("SELECT ID FROM Users WHERE Username = :username");
     $checkStmt->bindParam(':username', $username);
     $checkStmt->execute();
 
     if ($checkStmt->rowCount() > 0) {
-        // Return 409 Conflict if the user already exists
         sendJson(409, "error", "A user with this email/username already exists.");
     }
 
-    // Hash and salt the password
-    // PASSWORD_DEFAULT automatically handles the salting process for you securely
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insert the new user into the database
-    // Setting default values: Admin = 0 (Standard User), Disabled = 0 (Active), DateCreated/DateUpdated = current date
     $insertStmt = $pdo->prepare("
-        INSERT INTO Users (FirstName, LastName, Username, Password, DateCreated, DateUpdated) 
+        INSERT INTO Users (FirstName, LastName, Username, Password, DateCreated, DateUpdated)
         VALUES (:firstname, :lastname, :username, :password, CURDATE(), CURDATE())
     ");
 
@@ -64,15 +68,12 @@ try {
     $insertStmt->bindParam(':password', $hashedPassword);
 
     if ($insertStmt->execute()) {
-        // Return 201 Created on success
         sendJson(201, "success", "User registered successfully.");
-    } else {
-        sendJson(500, "error", "Failed to register user.");
     }
 
+    sendJson(500, "error", "Failed to register user.");
 } catch (PDOException $e) {
-    // Log the actual error internally, but return a generic message to the client
     error_log("Database Error in register.php: " . $e->getMessage());
-    sendJson(500, "error", "A database error occurred.: " . $e->getMessage());
+    sendJson(500, "error", "A database error occurred.");
 }
 ?>
