@@ -9,20 +9,64 @@ let contacts = [];
 let openId = null;
 let editing = null;
 let listRequest = 0;
+let deleteMode = false;
+let deleteSelection = new Set();
+let sortMode = "alpha";
 
 document.addEventListener("DOMContentLoaded", () => {
     const list = document.getElementById("contactList");
-    if (!list) {
-        return;
+    if (list) {
+        document.getElementById("contactSearch").addEventListener("input", onSearchInput);
+        document.getElementById("contactSort").addEventListener("click", onSortToggle);
+        document.getElementById("contactSort").addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                onSortToggle();
+            }
+        });
+        document.getElementById("deleteButton").addEventListener("click", onDelete);
+        document.getElementById("cancelDeleteButton").addEventListener("click", onCancelDelete);
+        list.addEventListener("click", onListClick);
+        restoreSortMode();
+        if (new URLSearchParams(window.location.search).get("created") === "1") {
+            showMessage("listMessage", "Contact created.", "success");
+        }
+        loadContacts("");
     }
 
-    document.getElementById("contactSearch").addEventListener("input", onSearchInput);
-    document.getElementById("createButton").addEventListener("click", toggleCreate);
-    document.getElementById("deleteButton").addEventListener("click", onDelete);
-    document.getElementById("createForm").addEventListener("submit", onCreate);
-    list.addEventListener("click", onListClick);
-    loadContacts("");
+    const createForm = document.getElementById("createForm");
+    if (createForm) {
+        createForm.addEventListener("submit", onCreate);
+        bindPhoneInput(createForm.phone);
+    }
 });
+
+function onSortToggle() {
+    sortMode = sortMode === "updated" ? "alpha" : "updated";
+    sessionStorage.setItem("contactManagerSort", sortMode);
+    contacts = sortContacts(contacts);
+    paintSortLabel();
+    paintContacts();
+}
+
+function restoreSortMode() {
+    const saved = sessionStorage.getItem("contactManagerSort");
+    sortMode = saved === "updated" ? "updated" : "alpha";
+    paintSortLabel();
+}
+
+function paintSortLabel() {
+    const sort = document.getElementById("contactSort");
+    if (!sort) {
+        return;
+    }
+    sort.textContent = `Order: ${sortLabel()}`;
+    sort.setAttribute("aria-label", `Order: ${sortLabel()}. Click to toggle.`);
+}
+
+function sortLabel() {
+    return sortMode === "updated" ? "Recents" : "Alphabetical";
+}
 
 function onSearchInput(event) {
     const query = event.currentTarget.value.trim();
@@ -32,19 +76,11 @@ function onSearchInput(event) {
     }, 300);
 }
 
-function toggleCreate() {
-    const form = document.getElementById("createForm");
-    form.classList.toggle("d-none");
-    if (!form.classList.contains("d-none")) {
-        form.querySelector("input").focus();
-    }
-}
-
 async function onCreate(event) {
     event.preventDefault();
     const form = event.currentTarget;
     const submitButton = form.querySelector("button[type='submit']");
-    clearMessage("listMessage");
+    clearMessage("formMessage");
 
     const payload = {
         FirstName: form.firstName.value.trim(),
@@ -54,14 +90,21 @@ async function onCreate(event) {
     };
 
     if (!payload.FirstName || !payload.LastName || !payload.PhoneNumber || !payload.Email) {
-        showMessage("listMessage", "First name, last name, phone, and email are required.", "danger");
+        showMessage("formMessage", "First name, last name, phone, and email are required.", "danger");
         return;
     }
 
     if (!isEmail(payload.Email)) {
-        showMessage("listMessage", "Enter a valid email address.", "danger");
+        showMessage("formMessage", "Enter a valid email address.", "danger");
         return;
     }
+
+    if (!isPhone(payload.PhoneNumber)) {
+        showMessage("formMessage", "Enter a 10-digit phone number.", "danger");
+        return;
+    }
+
+    payload.PhoneNumber = formatPhone(payload.PhoneNumber);
 
     setBusy(submitButton, true);
 
@@ -72,16 +115,13 @@ async function onCreate(event) {
         });
 
         if (!result.ok || result.payload.status !== "success") {
-            showMessage("listMessage", result.payload.message || "Could not create the contact.", "danger");
+            showMessage("formMessage", result.payload.message || "Could not create the contact.", "danger");
             return;
         }
 
-        form.reset();
-        form.classList.add("d-none");
-        showMessage("listMessage", "Contact created.", "success");
-        await loadContacts(currentSearch());
+        window.location.href = "dashboard.html?created=1";
     } catch (error) {
-        showMessage("listMessage", "Could not reach the contact service.", "danger");
+        showMessage("formMessage", "Could not reach the contact service.", "danger");
     } finally {
         setBusy(submitButton, false);
     }
@@ -89,30 +129,49 @@ async function onCreate(event) {
 
 async function onDelete() {
     clearMessage("listMessage");
-    const contact = contacts.find((item) => String(item.ID) === String(openId));
-    if (!contact) {
-        showMessage("listMessage", "Open a contact, then choose Delete.", "danger");
+
+    if (!deleteMode) {
+        if (contacts.length === 0) {
+            showMessage("listMessage", "No contacts to delete.", "danger");
+            return;
+        }
+        deleteSelection = new Set();
+        deleteMode = true;
+        setDeleteButtonState();
+        paintContacts();
         return;
     }
 
-    const name = contactName(contact);
-    if (!window.confirm(`Delete ${name}?`)) {
+    if (deleteSelection.size === 0) {
+        showMessage("listMessage", "Select one or more contacts, or choose Cancel.", "danger");
         return;
     }
 
+    const ids = [...deleteSelection];
     const button = document.getElementById("deleteButton");
     setBusy(button, true);
 
     try {
-        const result = await requestContact(`contacts/${contact.ID}`, { method: "DELETE" });
-        if (!result.ok || result.payload.status !== "success") {
-            showMessage("listMessage", result.payload.message || "Could not delete the contact.", "danger");
+        const failedIds = [];
+        let failureMessage = "";
+        for (const id of ids) {
+            const result = await requestContact(`contacts/${id}`, { method: "DELETE" });
+            if (!result.ok || result.payload.status !== "success") {
+                failedIds.push(String(id));
+                failureMessage = result.payload.message || "Could not delete a contact.";
+            }
+        }
+
+        if (failedIds.length > 0) {
+            showMessage("listMessage", failureMessage, "danger");
+            deleteSelection = new Set(failedIds);
+            await loadContacts(currentSearch());
             return;
         }
 
-        openId = null;
-        editing = null;
-        showMessage("listMessage", "Contact deleted.", "success");
+        closeDeletePicker();
+        const count = ids.length;
+        showMessage("listMessage", count === 1 ? "Contact deleted." : `${count} contacts deleted.`, "success");
         await loadContacts(currentSearch());
     } catch (error) {
         showMessage("listMessage", "Could not reach the contact service.", "danger");
@@ -121,7 +180,35 @@ async function onDelete() {
     }
 }
 
+function onCancelDelete() {
+    clearMessage("listMessage");
+    closeDeletePicker();
+}
+
+function closeDeletePicker() {
+    deleteMode = false;
+    deleteSelection = new Set();
+    setDeleteButtonState();
+    paintContacts();
+}
+
+function setDeleteButtonState() {
+    const button = document.getElementById("deleteButton");
+    const cancel = document.getElementById("cancelDeleteButton");
+    if (button) {
+        button.classList.toggle("is-armed", deleteMode);
+        button.setAttribute("aria-expanded", String(deleteMode));
+    }
+    if (cancel) {
+        cancel.classList.toggle("d-none", !deleteMode);
+    }
+}
+
 function onListClick(event) {
+    if (event.target.closest(".contact-check")) {
+        return;
+    }
+
     const nameButton = event.target.closest(".contact-name");
     if (nameButton) {
         const id = nameButton.closest(".contact-row").dataset.id;
@@ -173,13 +260,18 @@ async function saveField(fieldRow) {
         return;
     }
 
+    if (field === "PhoneNumber" && !isPhone(value)) {
+        showMessage("listMessage", "Enter a 10-digit phone number.", "danger");
+        return;
+    }
+
     const payload = {
         FirstName: contact.FirstName || "",
         LastName: contact.LastName || "",
-        PhoneNumber: contact.PhoneNumber || "",
+        PhoneNumber: formatPhone(contact.PhoneNumber || ""),
         Email: contact.Email || "",
     };
-    payload[field] = value;
+    payload[field] = field === "PhoneNumber" ? formatPhone(value) : value;
 
     const saveButton = fieldRow.querySelector(".field-save");
     setBusy(saveButton, true);
@@ -235,6 +327,10 @@ function rememberContacts(list, emptyMessage) {
         openId = null;
         editing = null;
     }
+    if (deleteMode) {
+        const available = new Set(contacts.map((contact) => String(contact.ID)));
+        deleteSelection = new Set([...deleteSelection].filter((id) => available.has(id)));
+    }
     paintContacts(list && list.length ? undefined : emptyMessage);
 }
 
@@ -266,6 +362,23 @@ function renderContact(contact) {
     const summary = document.createElement("div");
     summary.className = "contact-summary";
 
+    if (deleteMode) {
+        const box = document.createElement("input");
+        box.type = "checkbox";
+        box.className = "contact-check";
+        box.setAttribute("aria-label", `Select ${contactName(contact)}`);
+        box.checked = deleteSelection.has(String(contact.ID));
+        box.addEventListener("change", () => {
+            const id = String(contact.ID);
+            if (box.checked) {
+                deleteSelection.add(id);
+            } else {
+                deleteSelection.delete(id);
+            }
+        });
+        summary.append(box);
+    }
+
     const nameButton = document.createElement("button");
     nameButton.type = "button";
     nameButton.className = "contact-name";
@@ -274,7 +387,7 @@ function renderContact(contact) {
     summary.append(nameButton);
 
     if (contact.PhoneNumber) {
-        summary.append(metaSpan(contact.PhoneNumber));
+        summary.append(metaSpan(formatPhone(contact.PhoneNumber)));
     }
     if (contact.Email) {
         summary.append(metaSpan(contact.Email));
@@ -304,10 +417,21 @@ function renderField(contact, key, label) {
     if (isEditing) {
         const input = document.createElement("input");
         input.className = "field-input";
-        input.value = contact[key] || "";
-        input.maxLength = 50;
         if (key === "Email") {
             input.type = "email";
+            input.value = contact[key] || "";
+            input.maxLength = 50;
+        } else if (key === "PhoneNumber") {
+            input.type = "tel";
+            input.inputMode = "numeric";
+            input.maxLength = 14;
+            input.placeholder = "(123) 456-7890";
+            input.value = formatPhone(contact[key] || "");
+            bindPhoneInput(input);
+        } else {
+            input.type = "text";
+            input.value = contact[key] || "";
+            input.maxLength = 50;
         }
         row.append(input);
 
@@ -321,7 +445,7 @@ function renderField(contact, key, label) {
 
     const value = document.createElement("span");
     value.className = "field-value";
-    value.textContent = contact[key] || "Not added";
+    value.textContent = key === "PhoneNumber" ? formatPhone(contact[key] || "") || "Not added" : (contact[key] || "Not added");
     row.append(value);
 
     const change = document.createElement("button");
@@ -347,8 +471,51 @@ function contactName(contact) {
 
 function sortContacts(list) {
     return [...list].sort((a, b) => {
+        if (sortMode === "updated") {
+            const updated = contactDate(b).localeCompare(contactDate(a));
+            if (updated !== 0) {
+                return updated;
+            }
+            return Number(b.ID) - Number(a.ID);
+        }
         return contactName(a).localeCompare(contactName(b), undefined, { sensitivity: "base" });
     });
+}
+
+function contactDate(contact) {
+    return contact.DateUpdated || contact.DateCreated || "";
+}
+
+function bindPhoneInput(input) {
+    if (!input) {
+        return;
+    }
+
+    input.addEventListener("input", () => {
+        input.value = formatPhone(input.value);
+    });
+}
+
+function formatPhone(value) {
+    const digits = phoneDigits(value);
+    if (digits.length === 0) {
+        return "";
+    }
+    if (digits.length < 4) {
+        return `(${digits}`;
+    }
+    if (digits.length < 7) {
+        return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    }
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
+function phoneDigits(value) {
+    return String(value || "").replace(/\D/g, "").slice(0, 10);
+}
+
+function isPhone(value) {
+    return phoneDigits(value).length === 10;
 }
 
 function currentSearch() {

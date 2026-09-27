@@ -67,6 +67,19 @@ body {
     background: rgba(11, 17, 30, 0.08);
 }
 
+.sort-item {
+    padding: 0.35rem 0.2rem 0.45rem;
+    cursor: pointer;
+    color: #0b111e;
+    font-weight: 600;
+}
+
+.sort-item:hover,
+.sort-item:focus,
+.sort-item:focus-visible {
+    outline: none;
+}
+
 .contact-list::-webkit-scrollbar {
     width: 10px;
 }
@@ -175,4 +188,21 @@ body {
 .field-action:focus {
     background: #19253d;
     color: #e2e8f0;
+}
+
+#deleteButton.is-armed {
+    outline: 2px solid #e2e8f0;
+    outline-offset: 2px;
+}
+
+.contact-check {
+    width: 1.05rem;
+    height: 1.05rem;
+    margin: 0;
+    flex: none;
+    accent-color: #0b111e;
+}
+
+.contact-row.is-open .contact-check {
+    accent-color: #e2e8f0;
 }
