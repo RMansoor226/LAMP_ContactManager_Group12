@@ -42,10 +42,6 @@ validateLength($lastName, 50, "Last Name");
 validateLength($username, 50, "Username");
 validateLength($password, 72, "Password");
 
-if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
-    sendJson(400, "error", "Invalid email format provided for Username.");
-}
-
 try {
     $checkStmt = $pdo->prepare("SELECT ID FROM Users WHERE Username = :username");
     $checkStmt->bindParam(':username', $username);

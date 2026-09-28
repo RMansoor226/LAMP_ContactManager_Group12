@@ -8,31 +8,35 @@
     <link rel="stylesheet" href="css/auth.css">
 </head>
 <body>
-    <main class="container d-flex flex-column align-items-center justify-content-center py-5">
+    <main class="container min-vh-100 d-flex flex-column align-items-center justify-content-center py-5">
         <header class="text-center mb-4">
-            <img class="auth-logo mb-2" src="media/contactLogo.png" alt="Contact Manager logo">
-            <h1 class="h2 mb-0">Contact Manager</h1>
+            <img class="auth-logo mb-3" src="media/contactLogo.png" alt="Contact Manager logo">
+            <h1 class="h2 mb-0 text-white">Contact Manager</h1>
         </header>
 
-        <section class="auth-card rounded-3 p-4 p-md-5">
-            <h2 class="h4 text-center mb-4">Login</h2>
-            <div id="formMessage" class="alert d-none" role="status"></div>
+        <section class="card auth-card rounded-4 border-0">
+            <div class="card-body p-4 p-md-5">
+                <h2 class="h4 text-center mb-1">Welcome back</h2>
+                <p class="text-center text-body-secondary mb-4">Log in to see your contacts.</p>
 
-            <form id="loginForm" novalidate>
-                <div class="mb-3">
-                    <label class="form-label" for="username">Username</label>
-                    <input class="form-control" type="text" id="username" name="username" autocomplete="username" required>
-                </div>
-                <div class="mb-4">
-                    <label class="form-label" for="password">Password</label>
-                    <input class="form-control" type="password" id="password" name="password" autocomplete="current-password" required>
-                </div>
-                <button class="btn btn-login w-100" type="submit">Login</button>
-            </form>
+                <div id="formMessage" class="alert d-none" role="status"></div>
 
-            <p class="text-center mt-4 mb-0">
-                Need an account? <a href="register.html">Register</a>
-            </p>
+                <form id="loginForm" novalidate>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" type="text" id="username" name="username" placeholder="Username" autocomplete="username" required>
+                        <label for="username">Username</label>
+                    </div>
+                    <div class="form-floating mb-4">
+                        <input class="form-control" type="password" id="password" name="password" placeholder="Password" autocomplete="current-password" required>
+                        <label for="password">Password</label>
+                    </div>
+                    <button class="btn btn-login btn-lg w-100" type="submit">Log in</button>
+                </form>
+
+                <p class="text-center mt-4 mb-0">
+                    Need an account? <a href="register.html">Register</a>
+                </p>
+            </div>
         </section>
     </main>
     <script src="js/auth.js"></script>

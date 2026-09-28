@@ -8,43 +8,53 @@
     <link rel="stylesheet" href="css/auth.css">
 </head>
 <body>
-    <main class="container d-flex flex-column align-items-center justify-content-center py-5">
+    <main class="container min-vh-100 d-flex flex-column align-items-center justify-content-center py-5">
         <header class="text-center mb-4">
-            <img class="auth-logo mb-2" src="media/contactLogo.png" alt="Contact Manager logo">
-            <h1 class="h2 mb-0">Contact Manager</h1>
+            <img class="auth-logo mb-3" src="media/contactLogo.png" alt="Contact Manager logo">
+            <h1 class="h2 mb-0 text-white">Contact Manager</h1>
         </header>
 
-        <section class="auth-card rounded-3 p-4 p-md-5">
-            <h2 class="h4 text-center mb-4">Create account</h2>
-            <div id="formMessage" class="alert d-none" role="status"></div>
+        <section class="card auth-card rounded-4 border-0">
+            <div class="card-body p-4 p-md-5">
+                <h2 class="h4 text-center mb-1">Create your account</h2>
+                <p class="text-center text-body-secondary mb-4">It takes less than a minute.</p>
 
-            <form id="registerForm" novalidate>
-                <div class="mb-3">
-                    <label class="form-label" for="firstName">First name</label>
-                    <input class="form-control" type="text" id="firstName" name="firstName" autocomplete="given-name" maxlength="50" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="lastName">Last name</label>
-                    <input class="form-control" type="text" id="lastName" name="lastName" autocomplete="family-name" maxlength="50" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="username">Email</label>
-                    <input class="form-control" type="email" id="username" name="username" autocomplete="username" maxlength="50" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="password">Password</label>
-                    <input class="form-control" type="password" id="password" name="password" autocomplete="new-password" maxlength="72" required>
-                </div>
-                <div class="mb-4">
-                    <label class="form-label" for="confirmPassword">Confirm password</label>
-                    <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password" maxlength="72" required>
-                </div>
-                <button class="btn btn-login w-100" type="submit">Create account</button>
-            </form>
+                <div id="formMessage" class="alert d-none" role="status"></div>
 
-            <p class="text-center mt-4 mb-0">
-                Already have an account? <a href="index.html">Log in</a>
-            </p>
+                <form id="registerForm" novalidate>
+                    <div class="row g-3 mb-3">
+                        <div class="col-sm-6">
+                            <div class="form-floating">
+                                <input class="form-control" type="text" id="firstName" name="firstName" placeholder="First name" autocomplete="given-name" maxlength="50" required>
+                                <label for="firstName">First name</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-floating">
+                                <input class="form-control" type="text" id="lastName" name="lastName" placeholder="Last name" autocomplete="family-name" maxlength="50" required>
+                                <label for="lastName">Last name</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" type="email" id="username" name="username" placeholder="Username" autocomplete="username" maxlength="50" required>
+                        <label for="username">Username</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" type="password" id="password" name="password" placeholder="Password" autocomplete="new-password" maxlength="72" required>
+                        <label for="password">Password</label>
+                    </div>
+                    <div class="form-floating mb-4">
+                        <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" autocomplete="new-password" maxlength="72" required>
+                        <label for="confirmPassword">Confirm password</label>
+                    </div>
+                    <button class="btn btn-login btn-lg w-100" type="submit">Create account</button>
+                </form>
+
+                <p class="text-center mt-4 mb-0">
+                    Already have an account? <a href="index.html">Log in</a>
+                </p>
+            </div>
         </section>
     </main>
     <script src="js/auth.js"></script>

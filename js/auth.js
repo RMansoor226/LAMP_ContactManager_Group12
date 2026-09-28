@@ -106,6 +106,8 @@ async function onRegister(event) {
 
         if (!result.ok || result.payload.status !== "success") {
             showMessage("formMessage", result.payload.message || "Registration failed.", "danger");
+            console.log("Is result ok? " + result.ok);
+            console.log("Result payload status: ", result.payload.status);
             return;
         }
 

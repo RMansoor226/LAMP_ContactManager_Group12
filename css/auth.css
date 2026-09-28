@@ -1,59 +1,174 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+/* ------------------------------------------------------------------
+   Design tokens
+   Depth rule: the further a surface sits from the background,
+   the lighter it is.
+     layer-0  animated background (darkest)
+     layer-1  cards / boards
+     layer-2  inputs, lists, sub-cards
+     layer-3  open rows, hovered rows (lightest)
+------------------------------------------------------------------- */
+:root {
+    --cm-bg-1: #040a18;
+    --cm-bg-2: #0a2342;
+    --cm-bg-3: #0d5170;
+    --cm-bg-4: #1c8ba8;
+
+    --cm-layer-1: rgba(214, 231, 240, 0.94);
+    --cm-layer-2: #e9f2f8;
+    --cm-layer-3: #f8fbfd;
+
+    --cm-ink: #071426;
+    --cm-ink-soft: #2c4a63;
+    --cm-accent: #0b5f80;
+    --cm-accent-hover: #0e7aa3;
+    --cm-line: rgba(7, 20, 38, 0.16);
+}
+
+/* ------------------------------------------------------------------
+   Animated gradient background (dark blue -> cyan -> back)
+------------------------------------------------------------------- */
 body {
     min-height: 100vh;
     margin: 0;
-    background: radial-gradient(circle at top left, #19253d 0%, #0b111e 100%);
-    color: #e2e8f0;
+    background-color: var(--cm-bg-1);
+    color: #e6f1f7;
+    font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+        135deg,
+        var(--cm-bg-1) 0%,
+        var(--cm-bg-2) 28%,
+        var(--cm-bg-3) 55%,
+        var(--cm-bg-4) 78%,
+        var(--cm-bg-2) 100%
+    );
+    background-size: 300% 300%;
+    animation: gradient-drift 22s ease-in-out infinite;
+    will-change: background-position;
+}
+
+@keyframes gradient-drift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body::before {
+        animation: none;
+    }
+}
+
+h1, h2, h3 {
+    letter-spacing: -0.02em;
+    font-weight: 700;
+}
+
+/* ------------------------------------------------------------------
+   Login / register / create card  (layer 1)
+------------------------------------------------------------------- */
 .auth-logo {
-    width: 72px;
-    height: 72px;
+    width: 76px;
+    height: 76px;
+    padding: 10px;
     object-fit: contain;
+    background: var(--cm-layer-2);
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 .auth-card {
-    width: min(100%, 420px);
-    background: linear-gradient(135deg, #e2e8f0, #64748b);
-    color: #0b111e;
+    --bs-card-bg: var(--cm-layer-1);
+    --bs-card-color: var(--cm-ink);
+    width: min(100%, 440px);
+    background: var(--cm-layer-1);
+    color: var(--cm-ink);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    box-shadow: 0 24px 60px rgba(2, 8, 20, 0.55);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
 }
 
-.auth-card .form-control {
-    border: 1px solid #0b111e;
+.auth-card .text-body-secondary {
+    color: var(--cm-ink-soft) !important;
 }
 
+/* Inputs sit one layer above the card */
+.auth-card .form-control,
+.contact-board .form-control {
+    background: var(--cm-layer-3);
+    color: var(--cm-ink);
+    border: 1px solid var(--cm-line);
+    border-radius: 0.75rem;
+}
+
+.auth-card .form-floating > label {
+    color: var(--cm-ink-soft);
+}
+
+.auth-card .form-control:focus,
+.contact-board .form-control:focus {
+    background: #fff;
+    color: var(--cm-ink);
+    border-color: var(--cm-accent-hover);
+    box-shadow: 0 0 0 0.2rem rgba(14, 122, 163, 0.28);
+}
+
+.auth-card a,
+.contact-board a:not(.btn) {
+    color: var(--cm-accent);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-card a:hover,
+.auth-card a:focus-visible {
+    color: var(--cm-accent-hover);
+    text-decoration: underline;
+}
+
+/* ------------------------------------------------------------------
+   Primary button (used on every page)
+------------------------------------------------------------------- */
 .btn-login {
-    background: #0b111e;
-    color: #e2e8f0;
-    border: none;
+    --bs-btn-color: #f4fafd;
+    --bs-btn-bg: var(--cm-accent);
+    --bs-btn-border-color: var(--cm-accent);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--cm-accent-hover);
+    --bs-btn-hover-border-color: var(--cm-accent-hover);
+    --bs-btn-focus-shadow-rgb: 14, 122, 163;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #094c66;
+    --bs-btn-active-border-color: #094c66;
+    --bs-btn-border-radius: 0.75rem;
+    font-weight: 600;
+    box-shadow: 0 6px 16px rgba(7, 20, 38, 0.25);
 }
 
-.btn-login:hover,
-.btn-login:focus {
-    background: #19253d;
-    color: #e2e8f0;
-}
-
+/* ------------------------------------------------------------------
+   Dashboard (kept in sync so it matches the new look)
+------------------------------------------------------------------- */
 .dashboard-shell {
     max-width: 880px;
 }
 
 .contact-board {
     width: 100%;
-    background: linear-gradient(135deg, #e2e8f0, #64748b);
-    color: #0b111e;
-}
-
-.contact-board .form-control {
-    border: 1px solid #0b111e;
-    background: #e2e8f0;
-    color: #0b111e;
-}
-
-.contact-board .form-control:focus {
-    border-color: #0b111e;
-    box-shadow: 0 0 0 0.2rem rgba(11, 17, 30, 0.25);
-    background: #e2e8f0;
-    color: #0b111e;
+    background: var(--cm-layer-1);
+    color: var(--cm-ink);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    box-shadow: 0 24px 60px rgba(2, 8, 20, 0.55);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
 }
 
 .contact-list {
@@ -62,15 +177,15 @@ body {
     list-style: none;
     margin: 0;
     padding: 0;
-    border: 1px solid #0b111e;
-    border-radius: 8px;
-    background: rgba(11, 17, 30, 0.08);
+    border: 1px solid var(--cm-line);
+    border-radius: 0.75rem;
+    background: var(--cm-layer-2);
 }
 
 .sort-item {
     padding: 0.35rem 0.2rem 0.45rem;
     cursor: pointer;
-    color: #0b111e;
+    color: var(--cm-ink);
     font-weight: 600;
 }
 
@@ -78,6 +193,7 @@ body {
 .sort-item:focus,
 .sort-item:focus-visible {
     outline: none;
+    color: var(--cm-accent);
 }
 
 .contact-list::-webkit-scrollbar {
@@ -85,12 +201,12 @@ body {
 }
 
 .contact-list::-webkit-scrollbar-thumb {
-    background: #0b111e;
+    background: var(--cm-accent);
     border-radius: 5px;
 }
 
 .contact-row + .contact-row {
-    border-top: 1px solid rgba(11, 17, 30, 0.25);
+    border-top: 1px solid var(--cm-line);
 }
 
 .contact-summary {
@@ -105,7 +221,7 @@ body {
     background: none;
     border: none;
     padding: 0;
-    color: #0b111e;
+    color: var(--cm-ink);
     font-weight: 600;
     text-align: left;
 }
@@ -116,7 +232,7 @@ body {
 }
 
 .contact-meta {
-    color: #19253d;
+    color: var(--cm-ink-soft);
     min-width: 0;
 }
 
@@ -125,16 +241,18 @@ body {
     margin: 0;
 }
 
+/* Open row is the lightest layer */
 .contact-row.is-open {
-    background: #0b111e;
-    color: #e2e8f0;
+    background: var(--cm-layer-3);
+    color: var(--cm-ink);
+    box-shadow: inset 4px 0 0 var(--cm-accent);
 }
 
 .contact-row.is-open .contact-name,
 .contact-row.is-open .contact-meta,
 .contact-row.is-open .field-label,
 .contact-row.is-open .field-value {
-    color: #e2e8f0;
+    color: var(--cm-ink);
 }
 
 .contact-detail {
@@ -151,7 +269,7 @@ body {
     align-items: center;
     gap: 0.75rem;
     padding: 0.45rem 0;
-    border-top: 1px solid rgba(226, 232, 240, 0.28);
+    border-top: 1px solid var(--cm-line);
 }
 
 .field-label {
@@ -167,31 +285,37 @@ body {
 }
 
 .field-input {
-    border: 1px solid #e2e8f0;
-    border-radius: 5px;
-    background: #e2e8f0;
-    color: #0b111e;
-    padding: 0.2rem 0.45rem;
+    border: 1px solid var(--cm-line);
+    border-radius: 0.5rem;
+    background: #fff;
+    color: var(--cm-ink);
+    padding: 0.2rem 0.5rem;
+}
+
+.field-input:focus {
+    outline: none;
+    border-color: var(--cm-accent-hover);
+    box-shadow: 0 0 0 0.15rem rgba(14, 122, 163, 0.28);
 }
 
 .field-action {
     margin-left: auto;
     flex: none;
-    background: #e2e8f0;
-    color: #0b111e;
+    background: var(--cm-accent);
+    color: #fff;
     border: none;
-    border-radius: 5px;
-    padding: 0.2rem 0.65rem;
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.75rem;
 }
 
 .field-action:hover,
 .field-action:focus {
-    background: #19253d;
-    color: #e2e8f0;
+    background: var(--cm-accent-hover);
+    color: #fff;
 }
 
 #deleteButton.is-armed {
-    outline: 2px solid #e2e8f0;
+    outline: 2px solid var(--cm-ink);
     outline-offset: 2px;
 }
 
@@ -200,9 +324,5 @@ body {
     height: 1.05rem;
     margin: 0;
     flex: none;
-    accent-color: #0b111e;
-}
-
-.contact-row.is-open .contact-check {
-    accent-color: #e2e8f0;
+    accent-color: var(--cm-accent);
 }

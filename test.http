@@ -1,0 +1,10 @@
+### POST /api/register
+POST http://localhost:8000/api/register
+Content-Type: application/json
+
+{
+  "first"
+  "username": "testuser",
+  "password": "securePassword123"
+}
+###

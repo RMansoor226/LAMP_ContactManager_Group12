@@ -2,7 +2,7 @@ const CONTACT_FIELDS = [
     ["FirstName", "First name"],
     ["LastName", "Last name"],
     ["PhoneNumber", "Phone"],
-    ["Email", "Email"],
+    ["Username", "Username"],
 ];
 
 let contacts = [];
@@ -86,16 +86,16 @@ async function onCreate(event) {
         FirstName: form.firstName.value.trim(),
         LastName: form.lastName.value.trim(),
         PhoneNumber: form.phone.value.trim(),
-        Email: form.email.value.trim(),
+        Username: form.username.value.trim(),
     };
 
-    if (!payload.FirstName || !payload.LastName || !payload.PhoneNumber || !payload.Email) {
-        showMessage("formMessage", "First name, last name, phone, and email are required.", "danger");
+    if (!payload.FirstName || !payload.LastName || !payload.PhoneNumber || !payload.Username) {
+        showMessage("formMessage", "First name, last name, phone, and username are required.", "danger");
         return;
     }
 
-    if (!isEmail(payload.Email)) {
-        showMessage("formMessage", "Enter a valid email address.", "danger");
+    if (!isUsername(payload.Username)) {
+        showMessage("formMessage", "Enter a valid username.", "danger");
         return;
     }
 
@@ -255,8 +255,8 @@ async function saveField(fieldRow) {
         return;
     }
 
-    if (field === "Email" && !isEmail(value)) {
-        showMessage("listMessage", "Enter a valid email address.", "danger");
+    if (field === "Username" && !isUsername(value)) {
+        showMessage("listMessage", "Enter a valid username.", "danger");
         return;
     }
 
@@ -269,7 +269,7 @@ async function saveField(fieldRow) {
         FirstName: contact.FirstName || "",
         LastName: contact.LastName || "",
         PhoneNumber: formatPhone(contact.PhoneNumber || ""),
-        Email: contact.Email || "",
+        Username: contact.Username || "",
     };
     payload[field] = field === "PhoneNumber" ? formatPhone(value) : value;
 
@@ -389,8 +389,8 @@ function renderContact(contact) {
     if (contact.PhoneNumber) {
         summary.append(metaSpan(formatPhone(contact.PhoneNumber)));
     }
-    if (contact.Email) {
-        summary.append(metaSpan(contact.Email));
+    if (contact.Username) {
+        summary.append(metaSpan(contact.Username));
     }
 
     const detail = document.createElement("div");
@@ -417,8 +417,8 @@ function renderField(contact, key, label) {
     if (isEditing) {
         const input = document.createElement("input");
         input.className = "field-input";
-        if (key === "Email") {
-            input.type = "email";
+        if (key === "Username") {
+            input.type = "Username";
             input.value = contact[key] || "";
             input.maxLength = 50;
         } else if (key === "PhoneNumber") {
@@ -516,6 +516,11 @@ function phoneDigits(value) {
 
 function isPhone(value) {
     return phoneDigits(value).length === 10;
+}
+
+function isUsername(username) {
+    const usernameRegex = /^[a-zA-Z0-9_-]{3,16}$/;
+    return usernameRegex.test(username);
 }
 
 function currentSearch() {

@@ -35,10 +35,6 @@ validateLength($email, 50, "Email");
 validateLength($phone, 50, "Phone Number");
 // --------------------------
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    sendJson(400, "error", "Invalid email format.");
-}
-
 try {
     // Insert the new contact, locked strictly to the logged-in user's ID
     $insertStmt = $pdo->prepare("

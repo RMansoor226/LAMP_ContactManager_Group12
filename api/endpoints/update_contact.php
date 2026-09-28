@@ -38,10 +38,6 @@ validateLength($email, 50, "Email");
 validateLength($phone, 50, "Phone Number");
 // --------------------------
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    sendJson(400, "error", "Invalid email format.");
-}
-
 try {
     // Check if the contact exists and verify ownership
     $checkStmt = $pdo->prepare("SELECT UserID FROM Contacts WHERE ID = :contact_id");

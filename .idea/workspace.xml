@@ -5,12 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5c995d21-a96f-4f11-874f-29777672aa5d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/endpoints/create_contact.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/endpoints/create_contact.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/endpoints/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/endpoints/login.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/endpoints/register.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/endpoints/register.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/endpoints/update_contact.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/endpoints/update_contact.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/auth.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/auth.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/contacts.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/contacts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/register.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTTP Request" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -27,63 +44,66 @@
     &quot;accountId&quot;: &quot;14ac8381-39f7-4ba7-9ea6-64320d94a7c3&quot;
   }
 }</component>
+  <component name="HttpClientOnboardingState"><![CDATA[{
+  "isOnboardingCommentShown": true
+}]]></component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0808652445872897" />
-      <entry key="MS500" value="1.793810504794099" />
-      <entry key="S2" value="3.101843061012838" />
-      <entry key="S5" value="4.557810636826792" />
-      <entry key="S10" value="6.1443834400802295" />
-      <entry key="S30" value="8.754042592844922" />
-      <entry key="S60" value="11.530022865433144" />
-      <entry key="M2" value="15.997609837058366" />
-      <entry key="M5" value="21.710274787338395" />
-      <entry key="M10" value="24.531551858253625" />
-      <entry key="M15" value="25.60882745759795" />
-      <entry key="M30" value="26.763075041981697" />
-      <entry key="H1" value="27.370830022674937" />
-      <entry key="H2" value="27.68421687944695" />
-      <entry key="H4" value="28.667322870398515" />
-      <entry key="D1" value="215.3344405964543" />
-      <entry key="W1" value="511.8146148800938" />
+      <entry key="MS100" value="1.0000000000000409" />
+      <entry key="MS500" value="1.0020991253238405" />
+      <entry key="S2" value="1.2227910158837088" />
+      <entry key="S5" value="1.6899696711217036" />
+      <entry key="S10" value="2.127992264491239" />
+      <entry key="S30" value="4.71631757967788" />
+      <entry key="S60" value="13.480617372090606" />
+      <entry key="M2" value="28.805646328609377" />
+      <entry key="M5" value="49.05727732065208" />
+      <entry key="M10" value="60.396189919250624" />
+      <entry key="M15" value="65.37942392896771" />
+      <entry key="M30" value="71.42501383878712" />
+      <entry key="H1" value="76.25168198020538" />
+      <entry key="H2" value="87.84441386203437" />
+      <entry key="H4" value="110.00512561735162" />
+      <entry key="D1" value="236.32494309924596" />
+      <entry key="W1" value="626.1775912908134" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="5.634572488076681E-107" />
-      <entry key="S2" value="2.7397771708640225E-27" />
-      <entry key="S5" value="2.3718438670519726E-11" />
-      <entry key="S10" value="4.870157971823883E-6" />
-      <entry key="S30" value="0.01695044156351946" />
-      <entry key="S60" value="0.13019386146635126" />
-      <entry key="M2" value="0.3608238648791834" />
-      <entry key="M5" value="0.6651477121521538" />
-      <entry key="M10" value="0.8155658846176402" />
-      <entry key="M15" value="0.872916495715966" />
-      <entry key="M30" value="0.9343000030589563" />
-      <entry key="H1" value="0.9665919528712568" />
-      <entry key="H2" value="0.9831815624663899" />
-      <entry key="H4" value="1.003240953373846" />
-      <entry key="D1" value="2.819942615909621" />
-      <entry key="W1" value="5.328062691271144" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="5.333368804757881E-138" />
+      <entry key="M10" value="2.3094087565344305E-69" />
+      <entry key="M15" value="1.7471648028569566E-46" />
+      <entry key="M30" value="1.321803617356587E-23" />
+      <entry key="H1" value="3.635661724880461E-12" />
+      <entry key="H2" value="1.9067944189557615E-6" />
+      <entry key="H4" value="0.0013971412829387232" />
+      <entry key="D1" value="0.9423511892839658" />
+      <entry key="W1" value="4.555807858325659" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.039838387957357" />
-      <entry key="MS500" value="1.7745689163813527" />
-      <entry key="S2" value="3.075086968412644" />
-      <entry key="S5" value="4.527123107445557" />
-      <entry key="S10" value="6.121522729369909" />
-      <entry key="S30" value="8.757848865689368" />
-      <entry key="S60" value="11.643709816333416" />
-      <entry key="M2" value="16.340218499573183" />
-      <entry key="M5" value="22.362840703891855" />
-      <entry key="M10" value="25.33951088792925" />
-      <entry key="M15" value="26.47633750636537" />
-      <entry key="M30" value="27.69449222721747" />
-      <entry key="H1" value="28.335933286629892" />
-      <entry key="H2" value="28.666641962519442" />
-      <entry key="H4" value="29.670181242645604" />
-      <entry key="D1" value="218.15427486031777" />
-      <entry key="W1" value="517.1426522902735" />
+      <entry key="MS100" value="0.9726549474122876" />
+      <entry key="MS500" value="0.9956428303285247" />
+      <entry key="S2" value="1.190401824796485" />
+      <entry key="S5" value="1.643996306394291" />
+      <entry key="S10" value="2.086791937096274" />
+      <entry key="S30" value="4.683094611216406" />
+      <entry key="S60" value="13.439243074160911" />
+      <entry key="M2" value="28.763733367502372" />
+      <entry key="M5" value="49.02932920190878" />
+      <entry key="M10" value="60.37907863394704" />
+      <entry key="M15" value="65.3670881105877" />
+      <entry key="M30" value="71.41827751062014" />
+      <entry key="H1" value="76.24809873025642" />
+      <entry key="H2" value="87.84240480055739" />
+      <entry key="H4" value="110.00531791019718" />
+      <entry key="D1" value="237.2669873700247" />
+      <entry key="W1" value="630.7333360461181" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -91,6 +111,9 @@
   &quot;fromUser&quot;: false
 }</component>
   <component name="ProjectId" id="3Jo45OeYElm7O4Q5Bpabnm35kYI" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -101,6 +124,8 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Shell Script.Backend Server.executor": "Run",
+    "Shell Script.Frontend Server.executor": "Run",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "#36 on frontend/login-and-registration",
@@ -125,6 +150,42 @@
       <recent name="C:\Users\apaxm\WebstormProjects\LAMP_ContactManager_Group12" />
     </key>
   </component>
+  <component name="RunManager" selected="Shell Script.Backend Server">
+    <configuration name="Backend Server" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="php -S localhost:8000 router.php" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="powershell.exe" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="false" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="Frontend Server" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="python -m http.server 5500" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="powershell.exe" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="false" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Shell Script.Frontend Server" />
+      <item itemvalue="Shell Script.Backend Server" />
+    </list>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -140,7 +201,7 @@
       <option name="presentableId" value="Default" />
       <updated>1790313903969</updated>
       <workItem from="1790313905390" duration="1136000" />
-      <workItem from="1790315084306" duration="5820000" />
+      <workItem from="1790315084306" duration="16672000" />
     </task>
     <servers />
   </component>
