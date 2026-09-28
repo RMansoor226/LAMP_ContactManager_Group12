@@ -519,9 +519,7 @@ function isPhone(value) {
 }
 
 function isEmail(value) {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    // Returns true if valid, false if invalid
-    return emailRegex.test(email);
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
 function currentSearch() {
