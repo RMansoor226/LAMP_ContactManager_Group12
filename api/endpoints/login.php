@@ -28,7 +28,7 @@ $password = $data['Password'];
 try {
     // Fetch the user by their Username
     $stmt = $pdo->prepare("
-        SELECT ID, FirstName, LastName, Username, Password, IsAdmin, Disabled
+        SELECT ID, FirstName, LastName, Username, Password, Admin, Disabled
         FROM Users
         WHERE Username = :username
     ");
@@ -52,7 +52,7 @@ try {
 
         // Remove the password hash from the array before sending the user data back to the frontend
         unset($user['Password']);
-        $user['IsAdmin'] = (int)$user['IsAdmin'];
+        $user['Admin'] = (int)$user['Admin'];
         $user['Disabled'] = (int)$user['Disabled'];
 
         sendJson(200, "success", "Login successful.", $user);

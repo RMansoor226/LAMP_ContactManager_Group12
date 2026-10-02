@@ -1,6 +1,6 @@
 <?php
 // PUT/PATCH /api/admin/users/{id}
-// Body: { FirstName, LastName, Username, IsAdmin (0|1, optional) }
+// Body: { FirstName, LastName, Username, Admin (0|1, optional) }
 // Password and disabled status have their own routes.
 if ($_SERVER['REQUEST_METHOD'] !== 'PUT' && $_SERVER['REQUEST_METHOD'] !== 'PATCH') {
     sendJson(405, "error", "Method not allowed. Use PUT.");
@@ -33,7 +33,7 @@ validateLength($lastName, 50, "Last Name");
 validateLength($username, 50, "Username");
 
 try {
-    $check = $pdo->prepare("SELECT IsAdmin, Disabled FROM Users WHERE ID = :id");
+    $check = $pdo->prepare("SELECT Admin, Disabled FROM Users WHERE ID = :id");
     $check->bindParam(':id', $targetId);
     $check->execute();
     $existing = $check->fetch();
@@ -42,10 +42,10 @@ try {
         sendJson(404, "error", "User not found.");
     }
 
-    $isAdmin = isset($data['IsAdmin']) ? (intval($data['IsAdmin']) === 1 ? 1 : 0) : (int)$existing['IsAdmin'];
+    $isAdmin = isset($data['Admin']) ? (intval($data['Admin']) === 1 ? 1 : 0) : (int)$existing['Admin'];
 
     // Don't allow demoting the last enabled admin.
-    if ($isAdmin === 0 && (int)$existing['IsAdmin'] === 1 && (int)$existing['Disabled'] === 0
+    if ($isAdmin === 0 && (int)$existing['Admin'] === 1 && (int)$existing['Disabled'] === 0
         && countActiveAdmins($targetId) === 0) {
         sendJson(409, "error", "Cannot remove admin rights from the last active administrator.");
     }
@@ -60,7 +60,7 @@ try {
 
     $stmt = $pdo->prepare("
         UPDATE Users
-        SET FirstName = :firstname, LastName = :lastname, Username = :username, IsAdmin = :isadmin
+        SET FirstName = :firstname, LastName = :lastname, Username = :username, Admin = :isadmin
         WHERE ID = :id
     ");
     $stmt->bindParam(':firstname', $firstName);

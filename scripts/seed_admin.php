@@ -13,7 +13,7 @@ if ($check->fetch()) {
 }
 
 $stmt = $pdo->prepare("
-    INSERT INTO Users (FirstName, LastName, Username, Password, IsAdmin, Disabled, DateCreated, DateUpdated)
+    INSERT INTO Users (FirstName, LastName, Username, Password, Admin, Disabled, DateCreated, DateUpdated)
     VALUES ('Application', 'Administrator', 'root', :pw, 1, 0, CURDATE(), CURDATE())
 ");
 $stmt->execute([':pw' => password_hash($defaultPassword, PASSWORD_DEFAULT)]);

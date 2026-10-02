@@ -1,6 +1,6 @@
 <?php
 // POST /api/admin/users
-// Body: { FirstName, LastName, Username, Password, IsAdmin (0|1, optional) }
+// Body: { FirstName, LastName, Username, Password, Admin (0|1, optional) }
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     sendJson(405, "error", "Method not allowed. Use POST.");
 }
@@ -26,7 +26,7 @@ if (empty($data['FirstName']) || empty($data['LastName']) || empty($data['Userna
 $firstName = $data['FirstName'];
 $lastName  = $data['LastName'];
 $username  = $data['Username'];
-$isAdmin   = (isset($data['IsAdmin']) && intval($data['IsAdmin']) === 1) ? 1 : 0;
+$isAdmin   = (isset($data['Admin']) && intval($data['Admin']) === 1) ? 1 : 0;
 
 validateLength($firstName, 50, "First Name");
 validateLength($lastName, 50, "Last Name");
@@ -46,7 +46,7 @@ try {
     $hash = password_hash($password, PASSWORD_DEFAULT);
 
     $stmt = $pdo->prepare("
-        INSERT INTO Users (FirstName, LastName, Username, Password, IsAdmin, Disabled, DateCreated, DateUpdated)
+        INSERT INTO Users (FirstName, LastName, Username, Password, Admin, Disabled, DateCreated, DateUpdated)
         VALUES (:firstname, :lastname, :username, :password, :isadmin, 0, CURDATE(), CURDATE())
     ");
     $stmt->bindParam(':firstname', $firstName);
