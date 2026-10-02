@@ -27,7 +27,11 @@ $password = $data['Password'];
 
 try {
     // Fetch the user by their Username
-    $stmt = $pdo->prepare("SELECT ID, FirstName, LastName, Username, Password FROM Users WHERE Username = :username");
+    $stmt = $pdo->prepare("
+        SELECT ID, FirstName, LastName, Username, Password, IsAdmin, Disabled
+        FROM Users
+        WHERE Username = :username
+    ");
     $stmt->bindParam(':username', $username);
     $stmt->execute();
     $user = $stmt->fetch();
@@ -36,6 +40,10 @@ try {
 
     // Verify user exists AND the password matches
     if ($user && password_verify($password, $user['Password'])) {
+        if ((int)$user['Disabled'] === 1) {
+            sendJson(403, "error", "This account has been disabled.");
+        }
+
         // Start the secure session
         // Regenerate the session ID
         session_regenerate_id(true);
@@ -44,6 +52,8 @@ try {
 
         // Remove the password hash from the array before sending the user data back to the frontend
         unset($user['Password']);
+        $user['IsAdmin'] = (int)$user['IsAdmin'];
+        $user['Disabled'] = (int)$user['Disabled'];
 
         sendJson(200, "success", "Login successful.", $user);
     } else {

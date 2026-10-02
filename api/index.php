@@ -51,6 +51,34 @@ switch ($endpoint) {
             require_once 'endpoints/get_contacts.php';
         }
         break;
+
+    case 'admin':
+        require_once 'endpoints/admin_helpers.php';
+
+        $resource = $route[1] ?? '';
+        $action   = $route[3] ?? '';
+        $method   = $_SERVER['REQUEST_METHOD'];
+
+        if ($resource === 'users') {
+            if ($action === 'password') {
+                require 'endpoints/admin_set_password.php';
+            } elseif ($action === 'status') {
+                require 'endpoints/admin_set_status.php';
+            } elseif ($method === 'GET') {
+                require 'endpoints/admin_get_users.php';
+            } elseif ($method === 'POST') {
+                require 'endpoints/admin_create_user.php';
+            } elseif ($method === 'PUT' || $method === 'PATCH') {
+                require 'endpoints/admin_update_user.php';
+            } else {
+                sendJson(405, "error", "Method not allowed. Users cannot be deleted; use /status to disable.");
+            }
+        } elseif ($resource === 'contacts') {
+            require 'endpoints/admin_get_contacts.php';
+        } else {
+            sendJson(404, "error", "Unknown admin route.");
+        }
+        break;
         
     default:
         // If the URL doesn't match any known endpoints
