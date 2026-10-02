@@ -53,9 +53,9 @@ function onSearchInput(event) {
 }
 
 function onListClick(event) {
-    const nameButton = event.target.closest(".contact-name");
-    if (nameButton) {
-        const id = nameButton.closest(".contact-row").dataset.id;
+    const toggle = event.target.closest(".contact-name, .collapse-toggle");
+    if (toggle) {
+        const id = toggle.closest(".contact-row").dataset.id;
         openId = String(openId) === id ? null : id;
         passwordEditId = null;
         if (String(contactsOpenId) !== String(openId)) {
@@ -341,7 +341,8 @@ function renderUser(user) {
     const item = document.createElement("li");
     item.className = "contact-row";
     item.dataset.id = user.ID;
-    if (String(user.ID) === String(openId)) {
+    const isOpen = String(user.ID) === String(openId);
+    if (isOpen) {
         item.classList.add("is-open");
     }
 
@@ -355,7 +356,7 @@ function renderUser(user) {
     nameButton.type = "button";
     nameButton.className = "contact-name";
     nameButton.textContent = userName(user);
-    nameButton.setAttribute("aria-expanded", String(item.classList.contains("is-open")));
+    nameButton.setAttribute("aria-expanded", String(isOpen));
     identity.append(nameButton);
 
     identity.append(metaSpan(user.Username || ""));
@@ -368,9 +369,15 @@ function renderUser(user) {
     }
 
     summary.append(identity);
+    summary.append(collapseToggle(isOpen, userName(user)));
 
-    const rowActions = document.createElement("div");
-    rowActions.className = "admin-row-actions";
+    const detail = document.createElement("div");
+    detail.className = "contact-detail";
+
+    detail.append(infoRow("Username", user.Username || "—"));
+
+    const actions = document.createElement("div");
+    actions.className = "admin-actions";
 
     const isSelf = isCurrentUser(user.ID);
 
@@ -380,31 +387,22 @@ function renderUser(user) {
             demote.disabled = true;
             demote.title = "Demoting yourself is blocked if you are the last active admin.";
         }
-        rowActions.append(demote);
+        actions.append(demote);
     } else {
-        rowActions.append(actionButton("Make admin", "promote"));
+        actions.append(actionButton("Make admin", "promote"));
     }
 
     if (Number(user.Disabled)) {
-        rowActions.append(actionButton("Enable account", "enable"));
+        actions.append(actionButton("Enable account", "enable"));
     } else {
         const disable = actionButton("Disable account", "disable");
         if (isSelf) {
             disable.disabled = true;
             disable.title = "You cannot disable your own account.";
         }
-        rowActions.append(disable);
+        actions.append(disable);
     }
 
-    summary.append(rowActions);
-
-    const detail = document.createElement("div");
-    detail.className = "contact-detail";
-
-    detail.append(infoRow("Username", user.Username || "—"));
-
-    const actions = document.createElement("div");
-    actions.className = "admin-actions";
     actions.append(actionButton(
         String(passwordEditId) === String(user.ID) ? "Cancel password" : "Change password",
         "password-toggle"
@@ -425,6 +423,20 @@ function renderUser(user) {
 
     item.append(summary, detail);
     return item;
+}
+
+function collapseToggle(isOpen, label) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "collapse-toggle";
+    button.setAttribute("aria-expanded", String(isOpen));
+    button.setAttribute("aria-label", isOpen ? `Collapse ${label}` : `Expand ${label}`);
+
+    const arrow = document.createElement("span");
+    arrow.className = "collapse-arrow";
+    arrow.setAttribute("aria-hidden", "true");
+    button.append(arrow);
+    return button;
 }
 
 function renderPasswordForm(userId) {
