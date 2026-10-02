@@ -148,7 +148,7 @@ function renderDashboard() {
         greeting.textContent = name ? `Signed in as ${name}` : "Signed in";
 
         const adminLink = document.getElementById("adminLink");
-        if (adminLink && Number(user.Admin)) {
+        if (adminLink && Number(user.Admin) === 1) {
             adminLink.classList.remove("d-none");
             adminLink.classList.add("d-flex");
         }
