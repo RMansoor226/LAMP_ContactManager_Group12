@@ -149,6 +149,11 @@ function renderDashboard() {
         const user = JSON.parse(raw);
         const name = [user.FirstName, user.LastName].filter(Boolean).join(" ");
         greeting.textContent = name ? `Signed in as ${name}` : "Signed in";
+
+        const adminLink = document.getElementById("adminLink");
+        if (adminLink && Number(user.IsAdmin)) {
+            adminLink.classList.remove("d-none");
+        }
     } catch (error) {
         greeting.textContent = "Signed in";
     }

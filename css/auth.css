@@ -326,3 +326,118 @@ h1, h2, h3 {
     flex: none;
     accent-color: var(--cm-accent);
 }
+
+/* ------------------------------------------------------------------
+   Admin page
+------------------------------------------------------------------- */
+.admin-badge {
+    display: inline-block;
+    padding: 0.1rem 0.55rem;
+    border-radius: 0.45rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.admin-badge-admin {
+    background: rgba(11, 95, 128, 0.15);
+    color: var(--cm-accent);
+}
+
+.admin-badge-disabled {
+    background: rgba(140, 40, 40, 0.12);
+    color: #8c2828;
+}
+
+.admin-summary {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    width: 100%;
+}
+
+.admin-identity {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.admin-row-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.45rem;
+    margin-left: auto;
+    flex: 0 0 auto;
+}
+
+.admin-row-actions .btn {
+    white-space: nowrap;
+}
+
+.admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.65rem 0 0.25rem;
+    border-top: 1px solid var(--cm-line);
+}
+
+@media (max-width: 640px) {
+    .admin-summary {
+        flex-wrap: wrap;
+    }
+
+    .admin-row-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+.admin-password-form {
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid var(--cm-line);
+    border-radius: 0.75rem;
+    background: var(--cm-layer-2);
+}
+
+.admin-contacts {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid var(--cm-line);
+    border-radius: 0.75rem;
+    background: var(--cm-layer-2);
+}
+
+.admin-contacts-heading {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.admin-contact-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.admin-contact-list li {
+    padding: 0.4rem 0;
+    border-top: 1px solid var(--cm-line);
+    color: var(--cm-ink-soft);
+    font-size: 0.95rem;
+}
+
+.admin-contact-list li:first-child {
+    border-top: none;
+    padding-top: 0;
+}

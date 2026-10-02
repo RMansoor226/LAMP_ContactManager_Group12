@@ -28,9 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("cancelDeleteButton").addEventListener("click", onCancelDelete);
         list.addEventListener("click", onListClick);
         restoreSortMode();
-        if (new URLSearchParams(window.location.search).get("created") === "1") {
-            showMessage("listMessage", "Contact created.", "success");
-        }
         loadContacts("");
     }
 
@@ -170,8 +167,7 @@ async function onDelete() {
         }
 
         closeDeletePicker();
-        const count = ids.length;
-        showMessage("listMessage", count === 1 ? "Contact deleted." : `${count} contacts deleted.`, "success");
+        clearMessage("listMessage");
         await loadContacts(currentSearch());
     } catch (error) {
         showMessage("listMessage", "Could not reach the contact service.", "danger");
@@ -288,7 +284,7 @@ async function saveField(fieldRow) {
         }
 
         editing = null;
-        showMessage("listMessage", "Contact updated.", "success");
+        clearMessage("listMessage");
         await loadContacts(currentSearch());
     } catch (error) {
         showMessage("listMessage", "Could not reach the contact service.", "danger");
