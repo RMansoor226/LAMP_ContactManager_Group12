@@ -25,6 +25,7 @@
             <input id="contactSearch" class="form-control mb-3" type="search" placeholder="Search contacts" autocomplete="off">
 
             <div class="d-flex gap-2 mb-3">
+                <div id="contactSort" class="btn btn-login sort-item" role="button" tabindex="0">Order: Alphabetical</div>
                 <a id="createButton" class="btn btn-login" href="create.html">Create</a>
                 <button id="deleteButton" class="btn btn-login" type="button">Delete</button>
                 <button id="cancelDeleteButton" class="btn btn-login d-none" type="button">Cancel</button>
@@ -32,8 +33,7 @@
 
             <div id="listMessage" class="alert d-none" role="status"></div>
 
-            <div id="contactSort" class="sort-item" role="button" tabindex="0">Order: Alphabetical</div>
-            <ul id="contactList" class="contact-list"></ul>
+            <ul id="contactList" class="contact-list my-2"></ul>
         </section>
     </main>
     <script src="js/auth.js"></script>
