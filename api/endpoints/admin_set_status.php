@@ -22,7 +22,7 @@ if (json_last_error() !== JSON_ERROR_NONE || !is_array($data) || !isset($data['D
 $disabled = intval($data['Disabled']) === 1 ? 1 : 0;
 
 try {
-    $check = $pdo->prepare("SELECT IsAdmin, Disabled FROM Users WHERE ID = :id");
+    $check = $pdo->prepare("SELECT Admin, Disabled FROM Users WHERE ID = :id");
     $check->bindParam(':id', $targetId);
     $check->execute();
     $target = $check->fetch();
@@ -35,7 +35,7 @@ try {
         if ((int)$targetId === (int)$adminId) {
             sendJson(409, "error", "You cannot disable your own account.");
         }
-        if ((int)$target['IsAdmin'] === 1 && (int)$target['Disabled'] === 0
+        if ((int)$target['Admin'] === 1 && (int)$target['Disabled'] === 0
             && countActiveAdmins($targetId) === 0) {
             sendJson(409, "error", "Cannot disable the last active administrator.");
         }
