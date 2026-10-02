@@ -151,7 +151,7 @@ function renderDashboard() {
         greeting.textContent = name ? `Signed in as ${name}` : "Signed in";
 
         const adminLink = document.getElementById("adminLink");
-        if (adminLink && Number(user.IsAdmin)) {
+        if (adminLink && Number(user.Admin)) {
             adminLink.classList.remove("d-none");
         }
     } catch (error) {

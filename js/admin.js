@@ -29,7 +29,7 @@ function requireAdminPage() {
 
     try {
         const user = JSON.parse(raw);
-        if (!Number(user.IsAdmin)) {
+        if (!Number(user.Admin)) {
             showMessage("listMessage", "Admin privileges required.", "danger");
             window.setTimeout(() => {
                 window.location.href = "dashboard.html";
@@ -69,7 +69,7 @@ function onListClick(event) {
     if (promoteButton) {
         const user = findUser(promoteButton.closest(".contact-row").dataset.id);
         if (user) {
-            updateUserProfile(user, { IsAdmin: 1 });
+            updateUserProfile(user, { Admin: 1 });
         }
         return;
     }
@@ -78,7 +78,7 @@ function onListClick(event) {
     if (demoteButton) {
         const user = findUser(demoteButton.closest(".contact-row").dataset.id);
         if (user) {
-            updateUserProfile(user, { IsAdmin: 0 });
+            updateUserProfile(user, { Admin: 0 });
         }
         return;
     }
@@ -163,7 +163,7 @@ async function updateUserProfile(user, overrides) {
         FirstName: user.FirstName,
         LastName: user.LastName,
         Username: user.Username,
-        IsAdmin: Number(user.IsAdmin) ? 1 : 0,
+        Admin: Number(user.Admin) ? 1 : 0,
         ...overrides,
     };
 
@@ -360,7 +360,7 @@ function renderUser(user) {
 
     identity.append(metaSpan(user.Username || ""));
 
-    if (Number(user.IsAdmin)) {
+    if (Number(user.Admin)) {
         identity.append(badge("Admin", "admin"));
     }
     if (Number(user.Disabled)) {
@@ -374,7 +374,7 @@ function renderUser(user) {
 
     const isSelf = isCurrentUser(user.ID);
 
-    if (Number(user.IsAdmin)) {
+    if (Number(user.Admin)) {
         const demote = actionButton("Remove admin", "demote");
         if (isSelf) {
             demote.disabled = true;
