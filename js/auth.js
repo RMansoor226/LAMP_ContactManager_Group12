@@ -38,7 +38,6 @@ async function onLogin(event) {
         return;
     }
 
-    console.log(`Username=${username}; password=${password}`);
 
     // if (!isUsername(username)) {
     //     showMessage("formMessage", "Enter a valid username.", "danger");
@@ -106,8 +105,6 @@ async function onRegister(event) {
 
         if (!result.ok || result.payload.status !== "success") {
             showMessage("formMessage", result.payload.message || "Registration failed.", "danger");
-            console.log("Is result ok? " + result.ok);
-            console.log("Result payload status: ", result.payload.status);
             return;
         }
 
@@ -153,6 +150,7 @@ function renderDashboard() {
         const adminLink = document.getElementById("adminLink");
         if (adminLink && Number(user.Admin)) {
             adminLink.classList.remove("d-none");
+            adminLink.classList.add("d-flex");
         }
     } catch (error) {
         greeting.textContent = "Signed in";

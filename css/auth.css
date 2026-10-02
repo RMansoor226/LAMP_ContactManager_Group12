@@ -185,7 +185,6 @@ h1, h2, h3 {
 .sort-item {
     padding: 0.35rem 0.2rem 0.45rem;
     cursor: pointer;
-    color: var(--cm-ink);
     font-weight: 600;
 }
 
@@ -193,7 +192,6 @@ h1, h2, h3 {
 .sort-item:focus,
 .sort-item:focus-visible {
     outline: none;
-    color: var(--cm-accent);
 }
 
 .contact-list::-webkit-scrollbar {
