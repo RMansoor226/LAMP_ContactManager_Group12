@@ -205,9 +205,9 @@ function onListClick(event) {
         return;
     }
 
-    const nameButton = event.target.closest(".contact-name");
-    if (nameButton) {
-        const id = nameButton.closest(".contact-row").dataset.id;
+    const toggle = event.target.closest(".contact-name, .collapse-toggle");
+    if (toggle) {
+        const id = toggle.closest(".contact-row").dataset.id;
         openId = String(openId) === id ? null : id;
         editing = null;
         paintContacts();
@@ -351,7 +351,8 @@ function renderContact(contact) {
     const item = document.createElement("li");
     item.className = "contact-row";
     item.dataset.id = contact.ID;
-    if (String(contact.ID) === String(openId)) {
+    const isOpen = String(contact.ID) === String(openId);
+    if (isOpen) {
         item.classList.add("is-open");
     }
 
@@ -379,7 +380,7 @@ function renderContact(contact) {
     nameButton.type = "button";
     nameButton.className = "contact-name";
     nameButton.textContent = contactName(contact);
-    nameButton.setAttribute("aria-expanded", String(item.classList.contains("is-open")));
+    nameButton.setAttribute("aria-expanded", String(isOpen));
     summary.append(nameButton);
 
     if (contact.PhoneNumber) {
@@ -389,6 +390,8 @@ function renderContact(contact) {
         summary.append(metaSpan(contact.Email));
     }
 
+    summary.append(collapseToggle(isOpen, contactName(contact)));
+
     const detail = document.createElement("div");
     detail.className = "contact-detail";
     CONTACT_FIELDS.forEach(([key, label]) => {
@@ -397,6 +400,20 @@ function renderContact(contact) {
 
     item.append(summary, detail);
     return item;
+}
+
+function collapseToggle(isOpen, label) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "collapse-toggle";
+    button.setAttribute("aria-expanded", String(isOpen));
+    button.setAttribute("aria-label", isOpen ? `Collapse ${label}` : `Expand ${label}`);
+
+    const arrow = document.createElement("span");
+    arrow.className = "collapse-arrow";
+    arrow.setAttribute("aria-hidden", "true");
+    button.append(arrow);
+    return button;
 }
 
 function renderField(contact, key, label) {
